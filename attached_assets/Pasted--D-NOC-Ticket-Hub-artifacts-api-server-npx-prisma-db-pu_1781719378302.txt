@@ -1,0 +1,80 @@
+
+D:\NOC-Ticket-Hub\artifacts\api-server>npx prisma db push
+Loaded Prisma config from prisma.config.ts.
+
+Prisma schema loaded from prisma\schema.prisma.
+Datasource "db": PostgreSQL database "noc_ticket_system", schema "public" at "localhost:5432"
+
+Your database is now in sync with your Prisma schema. Done in 1.31s
+
+
+D:\NOC-Ticket-Hub\artifacts\api-server>npx tsx prisma/seed.ts
+🌱 Seeding database...
+PrismaClientKnownRequestError:
+Invalid `prisma.user.upsert()` invocation in
+D:\NOC-Ticket-Hub\artifacts\api-server\prisma\seed.ts:13:35
+
+  10
+  11 // Seed admin user
+  12 const adminPassword = await bcrypt.hash("admin123", 10);
+→ 13 const admin = await prisma.user.upsert(
+Database `noc_ticket_system` does not exist on the database server
+    at zr.handleRequestError (D:\NOC-Ticket-Hub\node_modules\.pnpm\@prisma+client@7.8.0_prisma_6b9b49878f00fc5eb9db6a18103f6144\node_modules\@prisma\client\src\runtime\RequestHandler.ts:237:13)
+    at zr.handleAndLogRequestError (D:\NOC-Ticket-Hub\node_modules\.pnpm\@prisma+client@7.8.0_prisma_6b9b49878f00fc5eb9db6a18103f6144\node_modules\@prisma\client\src\runtime\RequestHandler.ts:183:12)
+    at zr.request (D:\NOC-Ticket-Hub\node_modules\.pnpm\@prisma+client@7.8.0_prisma_6b9b49878f00fc5eb9db6a18103f6144\node_modules\@prisma\client\src\runtime\RequestHandler.ts:152:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async a (D:\NOC-Ticket-Hub\node_modules\.pnpm\@prisma+client@7.8.0_prisma_6b9b49878f00fc5eb9db6a18103f6144\node_modules\@prisma\client\src\runtime\getPrismaClient.ts:963:24)
+    at async main (D:\NOC-Ticket-Hub\artifacts\api-server\prisma\seed.ts:13:17) {
+  code: 'P1003',
+  meta: {
+    modelName: 'User',
+    driverAdapterError: DriverAdapterError: DatabaseDoesNotExist
+        at PrismaPgAdapter.onError (file:///D:/NOC-Ticket-Hub/node_modules/.pnpm/@prisma+adapter-pg@7.8.0/node_modules/@prisma/adapter-pg/dist/index.mjs:642:11)
+        at file:///D:/NOC-Ticket-Hub/node_modules/.pnpm/@prisma+adapter-pg@7.8.0/node_modules/@prisma/adapter-pg/dist/index.mjs:684:68
+        at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+        at async PrismaPgAdapter.startTransaction (file:///D:/NOC-Ticket-Hub/node_modules/.pnpm/@prisma+adapter-pg@7.8.0/node_modules/@prisma/adapter-pg/dist/index.mjs:684:18)
+        at async qt.#r (D:\NOC-Ticket-Hub\node_modules\.pnpm\@prisma+client@7.8.0_prisma_6b9b49878f00fc5eb9db6a18103f6144\node_modules\@prisma\client-engine-runtime\src\transaction-manager\transaction-manager.ts:163:31)
+        at async qt.startInternalTransaction (D:\NOC-Ticket-Hub\node_modules\.pnpm\@prisma+client@7.8.0_prisma_6b9b49878f00fc5eb9db6a18103f6144\node_modules\@prisma\client-engine-runtime\src\transaction-manager\transaction-manager.ts:96:12)
+        at async e.interpretNode (D:\NOC-Ticket-Hub\node_modules\.pnpm\@prisma+client@7.8.0_prisma_6b9b49878f00fc5eb9db6a18103f6144\node_modules\@prisma\client-engine-runtime\src\interpreter\query-interpreter.ts:259:33)
+        at async e.run (D:\NOC-Ticket-Hub\node_modules\.pnpm\@prisma+client@7.8.0_prisma_6b9b49878f00fc5eb9db6a18103f6144\node_modules\@prisma\client-engine-runtime\src\interpreter\query-interpreter.ts:94:23)
+        at async e.execute (D:\NOC-Ticket-Hub\node_modules\.pnpm\@prisma+client@7.8.0_prisma_6b9b49878f00fc5eb9db6a18103f6144\node_modules\@prisma\client\src\runtime\core\engines\client\LocalExecutor.ts:81:12)
+        at async jt.request (D:\NOC-Ticket-Hub\node_modules\.pnpm\@prisma+client@7.8.0_prisma_6b9b49878f00fc5eb9db6a18103f6144\node_modules\@prisma\client\src\runtime\core\engines\client\ClientEngine.ts:504:22) {
+      cause: [Object]
+    }
+  },
+  clientVersion: '7.8.0'
+}
+
+D:\NOC-Ticket-Hub\artifacts\api-server>pnpm --filter @workspace/api-server run dev
+$ cross-env NODE_ENV=development pnpm run build && pnpm run start
+$ node ./build.mjs
+
+  dist\index.mjs                       2.1mb
+  dist\pino-worker.mjs               153.4kb
+  dist\pino-file.mjs                 142.1kb
+  dist\pino-pretty.mjs               114.6kb
+  dist\thread-stream-worker.mjs        7.3kb
+  dist\index.mjs.map                   3.4mb
+  dist\pino-worker.mjs.map           256.9kb
+  dist\pino-file.mjs.map             229.1kb
+  dist\pino-pretty.mjs.map           204.0kb
+  dist\thread-stream-worker.mjs.map   12.0kb
+
+Done in 662ms
+$ node --enable-source-maps ./dist/index.mjs
+D:\NOC-Ticket-Hub\artifacts\api-server\src\index.ts:8
+  throw new Error("PORT environment variable is required but was not provided.");
+        ^
+
+Error: PORT environment variable is required but was not provided.
+    at <anonymous> (D:\NOC-Ticket-Hub\artifacts\api-server\src\index.ts:8:9)
+    at ModuleJob.run (node:internal/modules/esm/module_job:430:25)
+    at async node:internal/modules/esm/loader:639:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v25.7.0
+[ELIFECYCLE] Command failed with exit code 1.
+[ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL] @workspace/api-server@0.0.0 dev: `cross-env NODE_ENV=development pnpm run build && pnpm run start`
+Exit status 1
+
+D:\NOC-Ticket-Hub\artifacts\api-server>

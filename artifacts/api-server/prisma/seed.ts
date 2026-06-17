@@ -1,3 +1,19 @@
+import { readFileSync, existsSync } from "fs";
+import { resolve, dirname } from "path";
+import { fileURLToPath } from "url";
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+for (const envFile of [".env", "../.env", "../../.env"]) {
+  const p = resolve(__dirname, envFile);
+  if (existsSync(p)) {
+    for (const line of readFileSync(p, "utf8").split("\n")) {
+      const m = line.match(/^([^#=]+)=(.*)$/);
+      if (m) process.env[m[1]!.trim()] ??= m[2]!.trim().replace(/^["']|["']$/g, "");
+    }
+    break;
+  }
+}
+
 import { PrismaClient } from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 import bcrypt from "bcryptjs";
