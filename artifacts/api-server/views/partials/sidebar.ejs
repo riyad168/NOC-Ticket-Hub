@@ -1,0 +1,63 @@
+<nav id="sidebar">
+  <div class="brand d-flex align-items-center gap-2">
+    <div class="logo"><i class="bi bi-shield-check"></i></div>
+    <div>
+      <div class="brand-name">NOC SYSTEM</div>
+      <div class="brand-sub">Ticket Management</div>
+    </div>
+  </div>
+
+  <div class="mt-2">
+    <div class="nav-section">Main</div>
+    <a href="/dashboard" class="nav-link <%= title === 'Dashboard' ? 'active' : '' %>">
+      <i class="bi bi-speedometer2"></i> Dashboard
+    </a>
+
+    <div class="nav-section">Ticket Management</div>
+    <a href="/tickets/create" class="nav-link <%= title === 'Create Ticket' ? 'active' : '' %>">
+      <i class="bi bi-plus-circle"></i> Create Ticket
+    </a>
+    <a href="/tickets" class="nav-link <%= title === 'All Tickets' ? 'active' : '' %>">
+      <i class="bi bi-ticket-detailed"></i> All Tickets
+    </a>
+    <% if (user && user.role !== 'admin') { %>
+    <a href="/tickets?assignedTo=me" class="nav-link">
+      <i class="bi bi-person-check"></i> My Tickets
+    </a>
+    <% } %>
+
+    <div class="nav-section">Reports</div>
+    <% if (user && (user.role === 'admin' || user.role === 'manager')) { %>
+    <a href="/reports/daily" class="nav-link <%= title === 'Daily Report' ? 'active' : '' %>">
+      <i class="bi bi-calendar-day"></i> Daily Report
+    </a>
+    <a href="/reports/monthly" class="nav-link <%= title === 'Monthly Report' ? 'active' : '' %>">
+      <i class="bi bi-calendar-month"></i> Monthly Report
+    </a>
+    <a href="/reports/engineer" class="nav-link <%= title === 'Engineer Performance' ? 'active' : '' %>">
+      <i class="bi bi-bar-chart-line"></i> Engineer Performance
+    </a>
+    <% } %>
+
+    <div class="nav-section">Master Data</div>
+    <a href="/customers" class="nav-link <%= title === 'Customers' ? 'active' : '' %>">
+      <i class="bi bi-building"></i> Customers
+    </a>
+    <a href="/categories" class="nav-link <%= title === 'Ticket Categories' ? 'active' : '' %>">
+      <i class="bi bi-tags"></i> Ticket Categories
+    </a>
+    <% if (user && (user.role === 'admin' || user.role === 'manager')) { %>
+    <a href="/users" class="nav-link <%= title === 'Users' ? 'active' : '' %>">
+      <i class="bi bi-people"></i> Users
+    </a>
+    <% } %>
+
+    <div class="nav-section">Settings</div>
+  </div>
+
+  <div class="sidebar-footer">
+    <a href="/logout" class="nav-link" style="color: #f87171;">
+      <i class="bi bi-box-arrow-left"></i> Logout
+    </a>
+  </div>
+</nav>

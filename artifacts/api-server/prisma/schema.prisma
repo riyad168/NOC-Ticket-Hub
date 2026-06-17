@@ -1,0 +1,97 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  password  String
+  role      Role     @default(noc_engineer)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  assignedTickets Ticket[]    @relation("AssignedEngineer")
+  createdTickets  Ticket[]    @relation("CreatedBy")
+  ticketLogs      TicketLog[]
+
+  @@map("users")
+}
+
+enum Role {
+  admin
+  noc_engineer
+  manager
+}
+
+model Customer {
+  id            Int      @id @default(autoincrement())
+  name          String
+  contactPerson String?  @map("contact_person")
+  phone         String?
+  email         String?
+  address       String?
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  tickets Ticket[]
+
+  @@map("customers")
+}
+
+model TicketCategory {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  createdAt DateTime @default(now()) @map("created_at")
+
+  tickets Ticket[]
+
+  @@map("ticket_categories")
+}
+
+enum TicketStatus {
+  Open
+  In_Progress
+  Resolved
+  Closed
+}
+
+model Ticket {
+  id           Int          @id @default(autoincrement())
+  ticketNumber String       @unique @map("ticket_number")
+  customerId   Int          @map("customer_id")
+  categoryId   Int          @map("category_id")
+  assignedTo   Int?         @map("assigned_to")
+  status       TicketStatus @default(Open)
+  remarks      String?
+  slaBreached  Boolean      @default(false) @map("sla_breached")
+  createdAt    DateTime     @default(now()) @map("created_at")
+  updatedAt    DateTime     @updatedAt @map("updated_at")
+  createdById  Int          @map("created_by_id")
+
+  customer         Customer       @relation(fields: [customerId], references: [id])
+  category         TicketCategory @relation(fields: [categoryId], references: [id])
+  assignedEngineer User?          @relation("AssignedEngineer", fields: [assignedTo], references: [id])
+  createdBy        User           @relation("CreatedBy", fields: [createdById], references: [id])
+  logs             TicketLog[]
+
+  @@map("tickets")
+}
+
+model TicketLog {
+  id          Int      @id @default(autoincrement())
+  ticketId    Int      @map("ticket_id")
+  action      String
+  description String?
+  userId      Int      @map("user_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  ticket Ticket @relation(fields: [ticketId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
+
+  @@map("ticket_logs")
+}

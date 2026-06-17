@@ -1,0 +1,101 @@
+<%- include('../partials/head') %>
+<div id="main">
+<%- include('../partials/sidebar') %>
+<%- include('../partials/topbar') %>
+<div class="content-area">
+
+  <!-- Filters -->
+  <div class="card mb-4">
+    <div class="card-body py-3">
+      <form method="GET" action="/tickets" class="row g-2 align-items-end">
+        <div class="col-md-4">
+          <label class="form-label" style="font-size:12px;font-weight:600;color:#64748b;">SEARCH</label>
+          <input type="text" name="search" class="form-control form-control-sm" placeholder="Ticket # or customer..." value="<%= filters.search || '' %>" />
+        </div>
+        <div class="col-md-3">
+          <label class="form-label" style="font-size:12px;font-weight:600;color:#64748b;">STATUS</label>
+          <select name="status" class="form-select form-select-sm">
+            <option value="">All Status</option>
+            <option value="Open" <%= filters.status === 'Open' ? 'selected' : '' %>>Open</option>
+            <option value="In_Progress" <%= filters.status === 'In_Progress' ? 'selected' : '' %>>In Progress</option>
+            <option value="Resolved" <%= filters.status === 'Resolved' ? 'selected' : '' %>>Resolved</option>
+            <option value="Closed" <%= filters.status === 'Closed' ? 'selected' : '' %>>Closed</option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label" style="font-size:12px;font-weight:600;color:#64748b;">CATEGORY</label>
+          <select name="category" class="form-select form-select-sm">
+            <option value="">All Categories</option>
+            <% categories.forEach(cat => { %>
+            <option value="<%= cat.id %>" <%= parseInt(filters.category) === cat.id ? 'selected' : '' %>><%= cat.name %></option>
+            <% }) %>
+          </select>
+        </div>
+        <div class="col-md-2 d-flex gap-2">
+          <button type="submit" class="btn btn-primary btn-sm flex-fill"><i class="bi bi-search me-1"></i>Filter</button>
+          <a href="/tickets" class="btn btn-outline-secondary btn-sm"><i class="bi bi-x"></i></a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h6 class="mb-0 fw-600" style="font-size:14px;"><i class="bi bi-ticket-detailed me-2 text-primary"></i>Tickets (<%= tickets.length %>)</h6>
+        <a href="/tickets/create" class="btn btn-primary btn-sm"><i class="bi bi-plus me-1"></i>Create Ticket</a>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-hover mb-0">
+          <thead>
+            <tr>
+              <th>Ticket No</th>
+              <th>Customer</th>
+              <th>Category</th>
+              <th>Status</th>
+              <th>Engineer</th>
+              <th>Created</th>
+              <th>SLA</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (tickets.length === 0) { %>
+            <tr><td colspan="8" class="text-center text-muted py-5"><i class="bi bi-inbox fs-2 d-block mb-2"></i>No tickets found</td></tr>
+            <% } %>
+            <% tickets.forEach(ticket => { %>
+            <tr>
+              <td><a href="/tickets/<%= ticket.id %>" class="fw-600 text-primary text-decoration-none"><%= ticket.ticketNumber %></a></td>
+              <td><%= ticket.customer.name %></td>
+              <td><span class="badge bg-light text-secondary" style="font-size:11px;border:1px solid #e2e8f0;"><%= ticket.category.name %></span></td>
+              <td><span class="badge-status badge-<%= ticket.status.toLowerCase().replace('_','_') %>"><%= ticket.status.replace('_',' ') %></span></td>
+              <td style="font-size:13px;"><%= ticket.assignedEngineer ? ticket.assignedEngineer.name : '—' %></td>
+              <td style="font-size:12px;color:#64748b;"><%= new Date(ticket.createdAt).toLocaleString('en-BD',{dateStyle:'short',timeStyle:'short'}) %></td>
+              <td>
+                <% if (ticket.slaBreached) { %>
+                <span class="badge-status badge-sla"><i class="bi bi-alarm me-1"></i>Breach</span>
+                <% } else { %>
+                <span class="badge-status badge-within"><i class="bi bi-check2 me-1"></i>OK</span>
+                <% } %>
+              </td>
+              <td>
+                <div class="d-flex gap-1">
+                  <a href="/tickets/<%= ticket.id %>" class="btn btn-sm btn-light" title="View"><i class="bi bi-eye"></i></a>
+                  <a href="/tickets/<%= ticket.id %>/edit" class="btn btn-sm btn-light" title="Edit"><i class="bi bi-pencil"></i></a>
+                  <% if (user && (user.role === 'admin' || user.role === 'manager')) { %>
+                  <form method="POST" action="/tickets/<%= ticket.id %>/delete" onsubmit="return confirm('Delete this ticket?')">
+                    <button type="submit" class="btn btn-sm btn-light text-danger" title="Delete"><i class="bi bi-trash"></i></button>
+                  </form>
+                  <% } %>
+                </div>
+              </td>
+            </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<%- include('../partials/footer') %>
+</div>

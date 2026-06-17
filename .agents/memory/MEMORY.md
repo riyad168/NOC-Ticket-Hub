@@ -1,0 +1,1 @@
+- [Prisma v7 setup](prisma-v7-setup.md) — v7 removes `url` from schema.prisma; requires `prisma.config.ts` + `@prisma/adapter-pg` for runtime client.

@@ -1,0 +1,53 @@
+<%- include('../partials/head') %>
+<div id="main">
+<%- include('../partials/sidebar') %>
+<%- include('../partials/topbar') %>
+<div class="content-area">
+  <div class="row justify-content-center">
+    <div class="col-lg-7">
+      <div class="card">
+        <div class="card-body p-4">
+          <h5 class="mb-4 fw-700" style="color:#0f172a;">
+            <i class="bi bi-building<%= editCustomer ? '' : '-add' %> me-2 text-primary"></i>
+            <%= editCustomer ? 'Edit Customer' : 'Add Customer' %>
+          </h5>
+
+          <% if (error) { %>
+          <div class="alert alert-danger"><i class="bi bi-exclamation-circle me-2"></i><%= error %></div>
+          <% } %>
+
+          <form method="POST" action="<%= editCustomer ? '/customers/' + editCustomer.id + '/edit' : '/customers/create' %>">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label fw-600" style="font-size:13px;">Company Name <span class="text-danger">*</span></label>
+                <input type="text" name="name" class="form-control" value="<%= editCustomer ? editCustomer.name : '' %>" required placeholder="ABC Internet" />
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-600" style="font-size:13px;">Contact Person</label>
+                <input type="text" name="contactPerson" class="form-control" value="<%= editCustomer ? (editCustomer.contactPerson || '') : '' %>" placeholder="John Doe" />
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-600" style="font-size:13px;">Phone</label>
+                <input type="text" name="phone" class="form-control" value="<%= editCustomer ? (editCustomer.phone || '') : '' %>" placeholder="+880 1XXXXXXXXX" />
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-600" style="font-size:13px;">Email</label>
+                <input type="email" name="email" class="form-control" value="<%= editCustomer ? (editCustomer.email || '') : '' %>" placeholder="contact@company.com" />
+              </div>
+              <div class="col-12">
+                <label class="form-label fw-600" style="font-size:13px;">Address</label>
+                <textarea name="address" class="form-control" rows="2" placeholder="Full address..."><%= editCustomer ? (editCustomer.address || '') : '' %></textarea>
+              </div>
+              <div class="col-12 d-flex gap-2 mt-2">
+                <button type="submit" class="btn btn-primary px-4"><i class="bi bi-check-lg me-1"></i><%= editCustomer ? 'Update' : 'Add Customer' %></button>
+                <a href="/customers" class="btn btn-outline-secondary"><i class="bi bi-arrow-left me-1"></i>Cancel</a>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<%- include('../partials/footer') %>
+</div>

@@ -1,0 +1,74 @@
+<%- include('../partials/head') %>
+<div id="main">
+<%- include('../partials/sidebar') %>
+<%- include('../partials/topbar') %>
+<div class="content-area">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h5 class="mb-0 fw-700" style="color:#0f172a;"><i class="bi bi-people me-2 text-primary"></i>Users</h5>
+    <% if (user && user.role === 'admin') { %>
+    <a href="/users/create" class="btn btn-primary btn-sm"><i class="bi bi-plus me-1"></i>Add User</a>
+    <% } %>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-hover mb-0">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Created</th>
+              <% if (user && user.role === 'admin') { %><th>Actions</th><% } %>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (users.length === 0) { %>
+            <tr><td colspan="6" class="text-center text-muted py-5"><i class="bi bi-person-x fs-2 d-block mb-2"></i>No users found</td></tr>
+            <% } %>
+            <% users.forEach((u, i) => { %>
+            <tr>
+              <td style="font-size:13px;color:#94a3b8;"><%= i + 1 %></td>
+              <td>
+                <div class="d-flex align-items-center gap-2">
+                  <div style="width:32px;height:32px;background:#eff6ff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:600;color:#3b82f6;font-size:12px;">
+                    <%= u.name.charAt(0).toUpperCase() %>
+                  </div>
+                  <span style="font-weight:600;font-size:13.5px;"><%= u.name %></span>
+                </div>
+              </td>
+              <td style="font-size:13px;color:#64748b;"><%= u.email %></td>
+              <td>
+                <% if (u.role === 'admin') { %>
+                <span class="badge" style="background:#fef3c7;color:#92400e;font-size:11px;padding:4px 10px;border-radius:20px;">Admin</span>
+                <% } else if (u.role === 'manager') { %>
+                <span class="badge" style="background:#ede9fe;color:#5b21b6;font-size:11px;padding:4px 10px;border-radius:20px;">Manager</span>
+                <% } else { %>
+                <span class="badge" style="background:#dbeafe;color:#1d4ed8;font-size:11px;padding:4px 10px;border-radius:20px;">NOC Engineer</span>
+                <% } %>
+              </td>
+              <td style="font-size:12px;color:#94a3b8;"><%= new Date(u.createdAt).toLocaleDateString() %></td>
+              <% if (user && user.role === 'admin') { %>
+              <td>
+                <div class="d-flex gap-1">
+                  <a href="/users/<%= u.id %>/edit" class="btn btn-sm btn-light" title="Edit"><i class="bi bi-pencil"></i></a>
+                  <% if (u.id !== user.id) { %>
+                  <form method="POST" action="/users/<%= u.id %>/delete" onsubmit="return confirm('Delete this user?')">
+                    <button type="submit" class="btn btn-sm btn-light text-danger"><i class="bi bi-trash"></i></button>
+                  </form>
+                  <% } %>
+                </div>
+              </td>
+              <% } %>
+            </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<%- include('../partials/footer') %>
+</div>

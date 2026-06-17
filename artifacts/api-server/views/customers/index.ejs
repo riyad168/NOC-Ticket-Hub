@@ -1,0 +1,59 @@
+<%- include('../partials/head') %>
+<div id="main">
+<%- include('../partials/sidebar') %>
+<%- include('../partials/topbar') %>
+<div class="content-area">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h5 class="mb-0 fw-700" style="color:#0f172a;"><i class="bi bi-building me-2 text-primary"></i>Customers</h5>
+    <% if (user && (user.role === 'admin' || user.role === 'manager')) { %>
+    <a href="/customers/create" class="btn btn-primary btn-sm"><i class="bi bi-plus me-1"></i>Add Customer</a>
+    <% } %>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-hover mb-0">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Company Name</th>
+              <th>Contact Person</th>
+              <th>Phone</th>
+              <th>Email</th>
+              <th>Address</th>
+              <% if (user && (user.role === 'admin' || user.role === 'manager')) { %><th>Actions</th><% } %>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (customers.length === 0) { %>
+            <tr><td colspan="7" class="text-center text-muted py-5"><i class="bi bi-building-x fs-2 d-block mb-2"></i>No customers found</td></tr>
+            <% } %>
+            <% customers.forEach((c, i) => { %>
+            <tr>
+              <td style="font-size:13px;color:#94a3b8;"><%= i + 1 %></td>
+              <td style="font-weight:600;font-size:13.5px;"><%= c.name %></td>
+              <td style="font-size:13px;"><%= c.contactPerson || '—' %></td>
+              <td style="font-size:13px;"><%= c.phone || '—' %></td>
+              <td style="font-size:13px;color:#64748b;"><%= c.email || '—' %></td>
+              <td style="font-size:12px;color:#94a3b8;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"><%= c.address || '—' %></td>
+              <% if (user && (user.role === 'admin' || user.role === 'manager')) { %>
+              <td>
+                <div class="d-flex gap-1">
+                  <a href="/customers/<%= c.id %>/edit" class="btn btn-sm btn-light" title="Edit"><i class="bi bi-pencil"></i></a>
+                  <form method="POST" action="/customers/<%= c.id %>/delete" onsubmit="return confirm('Delete customer?')">
+                    <button type="submit" class="btn btn-sm btn-light text-danger"><i class="bi bi-trash"></i></button>
+                  </form>
+                </div>
+              </td>
+              <% } %>
+            </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<%- include('../partials/footer') %>
+</div>
