@@ -1,0 +1,96 @@
+   "method": "GET",
+      "url": "/categories"
+    }
+    res: {
+      "statusCode": 200
+    }
+    responseTime: 166
+[02:56:43.266] INFO (18688): request completed
+    req: {
+      "id": 12,
+      "method": "GET",
+      "url": "/categories"
+    }
+    res: {
+      "statusCode": 304
+    }
+    responseTime: 71
+[02:56:46.136] INFO (18688): request completed
+    req: {
+      "id": 13,
+      "method": "GET",
+      "url": "/categories"
+    }
+    res: {
+      "statusCode": 304
+    }
+    responseTime: 74
+[02:56:48.882] INFO (18688): request completed
+    req: {
+      "id": 14,
+      "method": "GET",
+      "url": "/users"
+    }
+    res: {
+      "statusCode": 200
+    }
+    responseTime: 70
+PrismaClientKnownRequestError:
+Invalid `prisma.ticket.findMany()` invocation in
+D:\NOC-Ticket-Hub\artifacts\api-server\src\controllers\ticketController.ts:29:21
+
+  26 }
+  27
+  28 const [tickets, categories, engineers] = await Promise.all([
+→ 29   prisma.ticket.findMany(
+Authentication failed against the database server, the provided database credentials for `postgres` are not valid
+    at zr.handleRequestError (D:\NOC-Ticket-Hub\node_modules\.pnpm\@prisma+client@7.8.0_prisma_6b9b49878f00fc5eb9db6a18103f6144\node_modules\@prisma\client\src\runtime\RequestHandler.ts:237:13)
+    at zr.handleAndLogRequestError (D:\NOC-Ticket-Hub\node_modules\.pnpm\@prisma+client@7.8.0_prisma_6b9b49878f00fc5eb9db6a18103f6144\node_modules\@prisma\client\src\runtime\RequestHandler.ts:183:12)
+    at zr.request (D:\NOC-Ticket-Hub\node_modules\.pnpm\@prisma+client@7.8.0_prisma_6b9b49878f00fc5eb9db6a18103f6144\node_modules\@prisma\client\src\runtime\RequestHandler.ts:152:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async a (D:\NOC-Ticket-Hub\node_modules\.pnpm\@prisma+client@7.8.0_prisma_6b9b49878f00fc5eb9db6a18103f6144\node_modules\@prisma\client\src\runtime\getPrismaClient.ts:963:24)
+    at async Promise.all (index 0)
+    at async listTickets (D:\NOC-Ticket-Hub\artifacts\api-server\src\controllers\ticketController.ts:28:46) {
+  code: 'P1000',
+  meta: {
+    modelName: 'Ticket',
+    driverAdapterError: DriverAdapterError: AuthenticationFailed
+        at PrismaPgAdapter.onError (D:\NOC-Ticket-Hub\node_modules\.pnpm\@prisma+adapter-pg@7.8.0\node_modules\@prisma\adapter-pg\dist\index.mjs:642:11)
+        at PrismaPgAdapter.performIO (D:\NOC-Ticket-Hub\node_modules\.pnpm\@prisma+adapter-pg@7.8.0\node_modules\@prisma\adapter-pg\dist\index.mjs:637:12)
+        at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+        at async PrismaPgAdapter.queryRaw (D:\NOC-Ticket-Hub\node_modules\.pnpm\@prisma+adapter-pg@7.8.0\node_modules\@prisma\adapter-pg\dist\index.mjs:568:30)
+        at async e.interpretNode (D:\NOC-Ticket-Hub\node_modules\.pnpm\@prisma+client@7.8.0_prisma_6b9b49878f00fc5eb9db6a18103f6144\node_modules\@prisma\client-engine-runtime\src\interpreter\query-interpreter.ts:186:26)
+        at async e.interpretNode (D:\NOC-Ticket-Hub\node_modules\.pnpm\@prisma+client@7.8.0_prisma_6b9b49878f00fc5eb9db6a18103f6144\node_modules\@prisma\client-engine-runtime\src\interpreter\query-interpreter.ts:128:29)
+        at async e.interpretNode (D:\NOC-Ticket-Hub\node_modules\.pnpm\@prisma+client@7.8.0_prisma_6b9b49878f00fc5eb9db6a18103f6144\node_modules\@prisma\client-engine-runtime\src\interpreter\query-interpreter.ts:272:41)
+        at async e.run (D:\NOC-Ticket-Hub\node_modules\.pnpm\@prisma+client@7.8.0_prisma_6b9b49878f00fc5eb9db6a18103f6144\node_modules\@prisma\client-engine-runtime\src\interpreter\query-interpreter.ts:94:23)
+        at async e.execute (D:\NOC-Ticket-Hub\node_modules\.pnpm\@prisma+client@7.8.0_prisma_6b9b49878f00fc5eb9db6a18103f6144\node_modules\@prisma\client\src\runtime\core\engines\client\LocalExecutor.ts:81:12)
+        at async jt.request (D:\NOC-Ticket-Hub\node_modules\.pnpm\@prisma+client@7.8.0_prisma_6b9b49878f00fc5eb9db6a18103f6144\node_modules\@prisma\client\src\runtime\core\engines\client\ClientEngine.ts:504:22) {
+      cause: [Object]
+    }
+  },
+  clientVersion: '7.8.0'
+}
+[02:56:52.391] INFO (18688): request errored
+    req: {
+      "id": 15,
+      "method": "GET",
+      "url": "/tickets"
+    }
+    res: {
+      "statusCode": 500
+    }
+    responseTime: 86
+    err: {
+      "type": "Error",
+      "message": "failed with status code 500",
+      "stack":
+          Error: failed with status code 500
+              at onResFinished (D:\NOC-Ticket-Hub\node_modules\.pnpm\pino-http@10.5.0\node_modules\pino-http\logger.js:115:39)
+              at ServerResponse.onResponseComplete (D:\NOC-Ticket-Hub\node_modules\.pnpm\pino-http@10.5.0\node_modules\pino-http\logger.js:178:14)
+              at ServerResponse.emit (node:events:520:22)
+              at onFinish (node:_http_outgoing:1026:10)
+              at callback (node:internal/streams/writable:764:21)
+              at afterWrite (node:internal/streams/writable:708:5)
+              at afterWriteTick (node:internal/streams/writable:694:10)
+              at process.processTicksAndRejections (node:internal/process/task_queues:89:21)
+    }
