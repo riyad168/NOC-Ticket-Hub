@@ -20,16 +20,13 @@ export async function showDashboard(req: Request, res: Response): Promise<void> 
       }),
     ]);
 
-    const categoryStats = await prisma.ticket.groupBy({
-      by: ["categoryId"],
-      _count: { id: true },
+    const categories = await prisma.ticketCategory.findMany({
+      include: { _count: { select: { tickets: true } } },
     });
-
-    const categories = await prisma.ticketCategory.findMany();
-    const categoryData = categories.map((cat) => {
-      const stat = categoryStats.find((s) => s.categoryId === cat.id);
-      return { name: cat.name, count: stat?._count.id ?? 0 };
-    });
+    const categoryData = categories.map((cat) => ({
+      name: cat.name,
+      count: cat._count.tickets,
+    }));
 
     res.render("dashboard/index", {
       title: "Dashboard",
@@ -40,6 +37,7 @@ export async function showDashboard(req: Request, res: Response): Promise<void> 
       categoryData,
     });
   } catch (err) {
+    console.error("Dashboard error:", err);
     res.render("error", { title: "Error", user: req.user, message: "Failed to load dashboard" });
   }
 }
