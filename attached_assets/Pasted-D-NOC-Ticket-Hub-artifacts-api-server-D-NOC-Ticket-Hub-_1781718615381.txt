@@ -1,0 +1,94 @@
+D:\NOC-Ticket-Hub\artifacts\api-server>
+D:\NOC-Ticket-Hub\artifacts\api-server>pnpm install
+Scope: all 8 workspace projects
+Already up to date
+Done in 723ms using pnpm v11.7.0
+
+D:\NOC-Ticket-Hub\artifacts\api-server>pnpm prisma generate
+Loaded Prisma config from prisma.config.ts.
+
+Prisma schema loaded from prisma\schema.prisma.
+Error: Prisma schema validation - (get-config wasm)
+Error code: P1012
+error: The datasource property `url` is no longer supported in schema files. Move connection URLs for Migrate to `prisma.config.ts` and pass either `adapter` for a direct database connection or `accelerateUrl` for Accelerate to the `PrismaClient` constructor. See https://pris.ly/d/config-datasource and https://pris.ly/d/prisma7-client-config
+  -->  prisma\schema.prisma:7
+   |
+ 6 |   provider = "postgresql"
+ 7 |    url      = env("DATABASE_URL")
+   |
+
+Validation Error Count: 1
+[Context: getConfig]
+
+Prisma CLI Version : 7.8.0
+
+D:\NOC-Ticket-Hub\artifacts\api-server>pnpm run start
+$ node --enable-source-maps ./dist/index.mjs
+D:\NOC-Ticket-Hub\artifacts\api-server\src\lib\prisma.ts:1
+import { PrismaClient } from "@prisma/client";
+         ^
+SyntaxError: The requested module '@prisma/client' does not provide an export named 'PrismaClient'
+    at #asyncInstantiate (node:internal/modules/esm/module_job:319:21)
+    at async ModuleJob.run (node:internal/modules/esm/module_job:422:5)
+    at async node:internal/modules/esm/loader:639:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v25.7.0
+[ELIFECYCLE] Command failed with exit code 1.
+
+D:\NOC-Ticket-Hub\artifacts\api-server>
+D:\NOC-Ticket-Hub\artifacts\api-server>
+D:\NOC-Ticket-Hub\artifacts\api-server>cd artifacts\api-server
+The system cannot find the path specified.
+
+D:\NOC-Ticket-Hub\artifacts\api-server>npx prisma db push
+Loaded Prisma config from prisma.config.ts.
+
+Prisma schema loaded from prisma\schema.prisma.
+Error: Prisma schema validation - (get-config wasm)
+Error code: P1012
+error: The datasource property `url` is no longer supported in schema files. Move connection URLs for Migrate to `prisma.config.ts` and pass either `adapter` for a direct database connection or `accelerateUrl` for Accelerate to the `PrismaClient` constructor. See https://pris.ly/d/config-datasource and https://pris.ly/d/prisma7-client-config
+  -->  prisma\schema.prisma:7
+   |
+ 6 |   provider = "postgresql"
+ 7 |    url      = env("DATABASE_URL")
+   |
+
+Validation Error Count: 1
+[Context: getConfig]
+
+Prisma CLI Version : 7.8.0
+Assertion failed: !(handle->flags & UV_HANDLE_CLOSING), file src\win\async.c, line 76
+
+D:\NOC-Ticket-Hub\artifacts\api-server>npx tsx prisma/seed.ts
+D:\NOC-Ticket-Hub\artifacts\api-server\prisma\seed.ts:1
+import { PrismaClient } from "@prisma/client";
+         ^
+SyntaxError: The requested module '@prisma/client' does not provide an export named 'PrismaClient'
+    at #asyncInstantiate (node:internal/modules/esm/module_job:319:21)
+    at async ModuleJob.run (node:internal/modules/esm/module_job:422:5)
+    at async node:internal/modules/esm/loader:639:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v25.7.0
+
+D:\NOC-Ticket-Hub\artifacts\api-server>npx tsx prisma/seed.ts
+D:\NOC-Ticket-Hub\artifacts\api-server\prisma\seed.ts:1
+import { PrismaClient } from "@prisma/client";
+         ^
+SyntaxError: The requested module '@prisma/client' does not provide an export named 'PrismaClient'
+    at #asyncInstantiate (node:internal/modules/esm/module_job:319:21)
+    at async ModuleJob.run (node:internal/modules/esm/module_job:422:5)
+    at async node:internal/modules/esm/loader:639:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v25.7.0
+
+D:\NOC-Ticket-Hub\artifacts\api-server>pnpm --filter @workspace/api-server run dev
+$ export NODE_ENV=development && pnpm run build && pnpm run start
+'export' is not recognized as an internal or external command,
+operable program or batch file.
+[ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL] @workspace/api-server@0.0.0 dev: `export NODE_ENV=development && pnpm run build && pnpm run start`
+Exit status 1
+
+D:\NOC-Ticket-Hub\artifacts\api-server>
