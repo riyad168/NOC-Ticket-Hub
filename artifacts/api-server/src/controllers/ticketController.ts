@@ -10,10 +10,11 @@ async function generateTicketNumber(): Promise<string> {
 
 export async function listTickets(req: Request, res: Response): Promise<void> {
   try {
-    const { status, category, search } = req.query as Record<string, string>;
+    const { status, category, search, engineer } = req.query as Record<string, string>;
     const where: Record<string, unknown> = {};
     if (status) where["status"] = status;
     if (category) where["categoryId"] = parseInt(category);
+    if (engineer) where["assignedTo"] = parseInt(engineer);
     if (search) {
       where["OR"] = [
         { ticketNumber: { contains: search, mode: "insensitive" } },
@@ -24,13 +25,14 @@ export async function listTickets(req: Request, res: Response): Promise<void> {
       where["assignedTo"] = req.user.id;
     }
 
-    const [tickets, categories] = await Promise.all([
+    const [tickets, categories, engineers] = await Promise.all([
       prisma.ticket.findMany({
         where,
         orderBy: { createdAt: "desc" },
         include: { customer: true, category: true, assignedEngineer: true, createdBy: true },
       }),
       prisma.ticketCategory.findMany(),
+      prisma.user.findMany({ where: { role: "noc_engineer" }, orderBy: { name: "asc" } }),
     ]);
 
     res.render("tickets/index", {
@@ -38,10 +40,12 @@ export async function listTickets(req: Request, res: Response): Promise<void> {
       user: req.user,
       tickets,
       categories,
-      filters: { status, category, search },
+      engineers,
+      filters: { status, category, search, engineer },
     });
-  } catch {
-    res.render("error", { title: "Error", user: req.user, message: "Failed to load tickets" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Failed to load tickets. Check server logs.");
   }
 }
 
