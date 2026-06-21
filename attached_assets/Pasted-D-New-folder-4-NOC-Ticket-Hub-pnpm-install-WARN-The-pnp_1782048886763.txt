@@ -1,0 +1,39 @@
+D:\New folder (4)\NOC-Ticket-Hub>pnpm install
+[WARN] The "pnpm" field in package.json is no longer read by pnpm. The following keys were ignored: "pnpm.onlyBuiltDependencies". See https://pnpm.io/settings for the new home of each setting.
+Scope: all 8 workspace projects
+✓ Lockfile passes supply-chain policies (verified 3d ago)
+Lockfile is up to date, resolution step is skipped
+Already up to date
+[ERR_PNPM_IGNORED_BUILDS] Ignored build scripts: @prisma/engines@7.8.0, esbuild@0.27.3, prisma@7.8.0
+
+Run "pnpm approve-builds" to pick which dependencies should be allowed to run scripts.
+
+D:\New folder (4)\NOC-Ticket-Hub>pnpm approve-builds
+[WARN] The "pnpm" field in package.json is no longer read by pnpm. The following keys were ignored: "pnpm.onlyBuiltDependencies". See https://pnpm.io/settings for the new home of each setting.
+√ Choose which packages to build (Press <space> to select, <a> to toggle all, <i> to invert selection) @prisma/engines,
+esbuild, prisma
+√ The next packages will now be built: @prisma/engines, esbuild, prisma.
+Do you approve? Yes
+node_modules/.pnpm/esbuild@0.27.3/node_modules/esbuild: Running postinstall script, done in 3.2s
+node_modules/.pnpm/esbuild@0.27.3/node_modules/esbuild: Running postinstall script, done in 3.2s
+node_modules/.pnpm/@prisma+engines@7.8.0/node_modules/@prisma/engines: Running postinstall script, done in 573ms
+node_modules/.pnpm/prisma@7.8.0_@types+react-d_7f3b5b09d92aa3e3c3bfaad1a042c37a/node_modules/prisma: Running preinstall script, done in 189ms
+
+D:\New folder (4)\NOC-Ticket-Hub>pnpm install
+[WARN] The "pnpm" field in package.json is no longer read by pnpm. The following keys were ignored: "pnpm.onlyBuiltDependencies". See https://pnpm.io/settings for the new home of each setting.
+Scope: all 8 workspace projects
+Already up to date
+Done in 843ms using pnpm v11.8.0
+
+D:\New folder (4)\NOC-Ticket-Hub>pnpm --filter @workspace/api-server run dev
+[WARN] The "pnpm" field in package.json is no longer read by pnpm. The following keys were ignored: "pnpm.onlyBuiltDependencies". See https://pnpm.io/settings for the new home of each setting.
+$ cross-env NODE_ENV=development pnpm run build && pnpm run start
+[WARN] The "pnpm" field in package.json is no longer read by pnpm. The following keys were ignored: "pnpm.onlyBuiltDependencies". See https://pnpm.io/settings for the new home of each setting.
+$ prisma generate && node ./build.mjs
+Failed to load config file "D:\New folder (4)\NOC-Ticket-Hub\artifacts\api-server" as a TypeScript/JavaScript module. Error: PrismaConfigEnvError: Cannot resolve environment variable: DATABASE_URL.
+[ELIFECYCLE] Command failed with exit code 1.
+D:\New folder (4)\NOC-Ticket-Hub\artifacts\api-server:
+[ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL] @workspace/api-server@0.0.0 dev: `cross-env NODE_ENV=development pnpm run build && pnpm run start`
+Exit status 1
+
+D:\New folder (4)\NOC-Ticket-Hub>
