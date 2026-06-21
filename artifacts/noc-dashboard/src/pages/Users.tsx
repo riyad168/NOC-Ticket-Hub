@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useListUsers, useCreateUser, useUpdateUser } from "@workspace/api-client-react";
+import { useListUsers, useCreateUser, useUpdateUser, useListDepartments } from "@workspace/api-client-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -21,6 +21,7 @@ const formSchema = z.object({
   email: z.string().email("Invalid email"),
   password: z.string().min(6, "Password must be at least 6 characters").optional().or(z.literal("")),
   role: z.enum(["admin", "noc_engineer", "manager"]),
+  departmentId: z.coerce.number().optional().nullable(),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -32,6 +33,7 @@ export default function Users() {
   }
 
   const { data: users, isLoading } = useListUsers();
+  const { data: departments, isLoading: loadingDepartments } = useListDepartments();
   const queryClient = useQueryClient();
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
@@ -42,12 +44,12 @@ export default function Users() {
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: { name: "", email: "", password: "", role: "noc_engineer" },
+    defaultValues: { name: "", email: "", password: "", role: "noc_engineer", departmentId: null },
   });
 
   const onSubmit = (data: FormValues) => {
     if (editingId) {
-      const updateData = { name: data.name, email: data.email, role: data.role };
+      const updateData = { name: data.name, email: data.email, role: data.role, ...(data.departmentId ? { departmentId: data.departmentId } : { departmentId: null }) };
       updateUser.mutate({ id: editingId, data: updateData }, {
         onSuccess: () => {
           toast({ title: "User updated" });
@@ -72,14 +74,14 @@ export default function Users() {
 
   const handleEdit = (u: any) => {
     setEditingId(u.id);
-    form.reset({ name: u.name, email: u.email, role: u.role, password: "" });
+    form.reset({ name: u.name, email: u.email, role: u.role, password: "", departmentId: u.departmentId || null });
     setOpen(true);
   };
 
   const handleClose = () => {
     setOpen(false);
     setEditingId(null);
-    form.reset({ name: "", email: "", password: "", role: "noc_engineer" });
+    form.reset({ name: "", email: "", password: "", role: "noc_engineer", departmentId: null });
   };
 
   return (
@@ -125,6 +127,17 @@ export default function Users() {
                     <FormItem><FormLabel>Initial Password</FormLabel><FormControl><Input type="password" {...field} /></FormControl><FormMessage /></FormItem>
                   )} />
                 )}
+                <FormField control={form.control} name="departmentId" render={({ field }) => (
+                  <FormItem><FormLabel>Department (Optional)</FormLabel>
+                    <Select onValueChange={field.onChange} value={field.value ? String(field.value) : "unassigned"}>
+                      <FormControl><SelectTrigger><SelectValue placeholder="No Department" /></SelectTrigger></FormControl>
+                      <SelectContent>
+                        <SelectItem value="unassigned">No Department</SelectItem>
+                        {departments?.map((d) => <SelectItem key={d.id} value={String(d.id)}>{d.name}</SelectItem>)}
+                      </SelectContent>
+                    </Select>
+                  <FormMessage /></FormItem>
+                )} />
                 <div className="flex justify-end pt-4">
                   <Button type="submit" disabled={createUser.isPending || updateUser.isPending}>
                     {(createUser.isPending || updateUser.isPending) && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}

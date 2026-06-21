@@ -463,6 +463,60 @@ router.delete("/customers/:id", requireApiAuth, async (req, res) => {
   }
 });
 
+// ─── Departments ─────────────────────────────────────────────────────────────
+
+router.get("/departments", requireApiAuth, async (req, res) => {
+  try {
+    const departments = await prisma.department.findMany({ orderBy: { name: "asc" } });
+    res.json(departments);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to load departments" });
+  }
+});
+
+router.post("/departments", requireApiAuth, requireApiRole("admin"), async (req, res) => {
+  const { name, description } = req.body as { name: string; description?: string };
+  try {
+    const dept = await prisma.department.create({
+      data: { name, description: description || null },
+    });
+    res.status(201).json(dept);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to create department" });
+  }
+});
+
+router.patch("/departments/:id", requireApiAuth, requireApiRole("admin"), async (req, res) => {
+  const id = parseInt(req.params["id"]!);
+  const { name, description } = req.body as { name?: string; description?: string };
+  try {
+    const data: Record<string, unknown> = {};
+    if (name !== undefined) data["name"] = name;
+    if (description !== undefined) data["description"] = description || null;
+    const dept = await prisma.department.update({
+      where: { id },
+      data: data as Parameters<typeof prisma.department.update>[0]["data"],
+    });
+    res.json(dept);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to update department" });
+  }
+});
+
+router.delete("/departments/:id", requireApiAuth, requireApiRole("admin"), async (req, res) => {
+  const id = parseInt(req.params["id"]!);
+  try {
+    await prisma.department.delete({ where: { id } });
+    res.status(204).send();
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to delete department" });
+  }
+});
+
 // ─── Categories ──────────────────────────────────────────────────────────────
 
 router.get("/categories", requireApiAuth, async (req, res) => {

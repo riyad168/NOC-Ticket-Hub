@@ -2,7 +2,7 @@ import React from "react";
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/lib/auth";
 import { useLogout } from "@workspace/api-client-react";
-import { Activity, LayoutDashboard, Ticket, Users, Building, Tags, LogOut, Loader2 } from "lucide-react";
+import { Activity, LayoutDashboard, Ticket, Users, Building, Tags, LogOut, Loader2, Briefcase } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const navItems = [
@@ -10,6 +10,7 @@ const navItems = [
   { href: "/tickets", label: "Tickets", icon: Ticket, roles: ["admin", "noc_engineer", "manager"] },
   { href: "/customers", label: "Customers", icon: Building, roles: ["admin", "noc_engineer", "manager"] },
   { href: "/categories", label: "Categories", icon: Tags, roles: ["admin"] },
+  { href: "/departments", label: "Departments", icon: Briefcase, roles: ["admin"] },
   { href: "/users", label: "Users", icon: Users, roles: ["admin"] },
 ];
 

@@ -17,6 +17,7 @@ const TicketNew = React.lazy(() => import("@/pages/TicketNew"));
 const Customers = React.lazy(() => import("@/pages/Customers"));
 const Users = React.lazy(() => import("@/pages/Users"));
 const Categories = React.lazy(() => import("@/pages/Categories"));
+const Departments = React.lazy(() => import("@/pages/Departments"));
 
 const queryClient = new QueryClient();
 
@@ -49,6 +50,7 @@ function Router() {
       <Route path="/customers"><ProtectedRoute component={Customers} /></Route>
       <Route path="/users"><ProtectedRoute component={Users} /></Route>
       <Route path="/categories"><ProtectedRoute component={Categories} /></Route>
+      <Route path="/departments"><ProtectedRoute component={Departments} /></Route>
       
       <Route component={NotFound} />
     </Switch>

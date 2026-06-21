@@ -219,6 +219,25 @@ export interface CategoryCount {
   count: number;
 }
 
+export interface Department {
+  id: number;
+  name: string;
+  /** @nullable */
+  description?: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface DepartmentInput {
+  name: string;
+  description?: string;
+}
+
+export interface DepartmentUpdate {
+  name?: string;
+  description?: string;
+}
+
 export type ListTicketsParams = {
 status?: string;
 category?: string;

@@ -6,15 +6,30 @@ datasource db {
   provider = "postgresql"
 }
 
-model User {
-  id        Int      @id @default(autoincrement())
-  name      String
-  email     String   @unique
-  password  String
-  role      Role     @default(noc_engineer)
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+model Department {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  description String?
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
 
+  users   User[]
+  tickets Ticket[]
+
+  @@map("departments")
+}
+
+model User {
+  id           Int         @id @default(autoincrement())
+  name         String
+  email        String      @unique
+  password     String
+  role         Role        @default(noc_engineer)
+  departmentId Int?        @map("department_id")
+  createdAt    DateTime    @default(now()) @map("created_at")
+  updatedAt    DateTime    @updatedAt @map("updated_at")
+
+  department      Department? @relation(fields: [departmentId], references: [id])
   assignedTickets Ticket[]    @relation("AssignedEngineer")
   createdTickets  Ticket[]    @relation("CreatedBy")
   ticketLogs      TicketLog[]
@@ -65,6 +80,7 @@ model Ticket {
   ticketNumber String       @unique @map("ticket_number")
   customerId   Int          @map("customer_id")
   categoryId   Int          @map("category_id")
+  departmentId Int?         @map("department_id")
   assignedTo   Int?         @map("assigned_to")
   status       TicketStatus @default(Open)
   remarks      String?
@@ -73,10 +89,11 @@ model Ticket {
   updatedAt    DateTime     @updatedAt @map("updated_at")
   createdById  Int          @map("created_by_id")
 
-  customer         Customer       @relation(fields: [customerId], references: [id])
-  category         TicketCategory @relation(fields: [categoryId], references: [id])
-  assignedEngineer User?          @relation("AssignedEngineer", fields: [assignedTo], references: [id])
-  createdBy        User           @relation("CreatedBy", fields: [createdById], references: [id])
+  customer         Customer        @relation(fields: [customerId], references: [id])
+  category         TicketCategory  @relation(fields: [categoryId], references: [id])
+  department       Department?     @relation(fields: [departmentId], references: [id])
+  assignedEngineer User?           @relation("AssignedEngineer", fields: [assignedTo], references: [id])
+  createdBy        User            @relation("CreatedBy", fields: [createdById], references: [id])
   logs             TicketLog[]
 
   @@map("tickets")

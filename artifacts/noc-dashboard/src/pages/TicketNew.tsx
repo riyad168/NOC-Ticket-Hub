@@ -7,7 +7,8 @@ import {
   useCreateTicket, 
   useListCustomers, 
   useListCategories,
-  useListUsers
+  useListUsers,
+  useListDepartments
 } from "@workspace/api-client-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { ArrowLeft, Loader2 } from "lucide-react";
@@ -29,6 +30,7 @@ import { useToast } from "@/hooks/use-toast";
 const formSchema = z.object({
   customerId: z.coerce.number().min(1, { message: "Customer is required" }),
   categoryId: z.coerce.number().min(1, { message: "Category is required" }),
+  departmentId: z.coerce.number().optional().nullable(),
   assignedTo: z.coerce.number().optional().nullable(),
   remarks: z.string().optional(),
 });
@@ -43,6 +45,7 @@ export default function TicketNew() {
   const { data: customers, isLoading: loadingCustomers } = useListCustomers();
   const { data: categories, isLoading: loadingCategories } = useListCategories();
   const { data: users, isLoading: loadingUsers } = useListUsers();
+  const { data: departments, isLoading: loadingDepartments } = useListDepartments();
 
   const createTicket = useCreateTicket();
 
@@ -51,6 +54,7 @@ export default function TicketNew() {
     defaultValues: {
       customerId: 0,
       categoryId: 0,
+      departmentId: null,
       assignedTo: null,
       remarks: "",
     },
@@ -70,7 +74,7 @@ export default function TicketNew() {
     });
   };
 
-  const isLoading = loadingCustomers || loadingCategories || loadingUsers;
+  const isLoading = loadingCustomers || loadingCategories || loadingUsers || loadingDepartments;
 
   if (isLoading) {
     return (
@@ -149,6 +153,35 @@ export default function TicketNew() {
                           {categories?.map((cat) => (
                             <SelectItem key={cat.id} value={String(cat.id)}>
                               {cat.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="departmentId"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Department</FormLabel>
+                      <Select 
+                        onValueChange={field.onChange} 
+                        value={field.value ? String(field.value) : "unassigned"}
+                      >
+                        <FormControl>
+                          <SelectTrigger className="bg-background">
+                            <SelectValue placeholder="No Department" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="unassigned">No Department</SelectItem>
+                          {departments?.map((dept) => (
+                            <SelectItem key={dept.id} value={String(dept.id)}>
+                              {dept.name}
                             </SelectItem>
                           ))}
                         </SelectContent>
