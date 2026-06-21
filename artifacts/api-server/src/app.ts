@@ -11,6 +11,7 @@ import userRoutes from "./routes/users.js";
 import customerRoutes from "./routes/customers.js";
 import categoryRoutes from "./routes/categories.js";
 import reportRoutes from "./routes/reports.js";
+import apiRoutes from "./routes/api.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -39,8 +40,12 @@ app.use(express.static(path.join(__dirname, "..", "public")));
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "..", "views"));
 
+app.get("/healthz", (req, res) => res.json({ status: "ok" }));
+app.get("/api/healthz", (req, res) => res.json({ status: "ok" }));
+
+app.use("/api", apiRoutes);
+
 app.get("/", (req, res) => res.redirect("/dashboard"));
-app.get("/healthz", (req, res) => res.json({ ok: true }));
 
 app.use("/", authRoutes);
 app.use("/", dashboardRoutes);
