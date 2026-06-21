@@ -1,0 +1,32 @@
+D:\New folder (4)\NOC-Ticket-Hub>pnpm install
+Scope: all 8 workspace projects
+✓ Lockfile passes supply-chain policies (verified 3d ago)
+Lockfile is up to date, resolution step is skipped
+Already up to date
+[ERR_PNPM_IGNORED_BUILDS] Ignored build scripts: @prisma/engines@7.8.0, esbuild@0.27.3, prisma@7.8.0
+
+Run "pnpm approve-builds" to pick which dependencies should be allowed to run scripts.
+
+D:\New folder (4)\NOC-Ticket-Hub>pnpm --filter @workspace/api-server run dev
+Scope: all 8 workspace projects
+✓ Lockfile passes supply-chain policies (verified 3d ago)
+Lockfile is up to date, resolution step is skipped
+Already up to date
+[ERR_PNPM_IGNORED_BUILDS] Ignored build scripts: @prisma/engines@7.8.0, esbuild@0.27.3, prisma@7.8.0
+
+Run "pnpm approve-builds" to pick which dependencies should be allowed to run scripts.
+[ERROR] Command failed with exit code 1: "C:\Program Files\nodejs\node.exe" "C:\Users\FLS\AppData\Roaming\npm\node_modules\pnpm\bin\pnpm.mjs" install
+
+pnpm: Command failed with exit code 1: "C:\Program Files\nodejs\node.exe" "C:\Users\FLS\AppData\Roaming\npm\node_modules\pnpm\bin\pnpm.mjs" install
+    at getFinalError (file:///C:/Users/FLS/AppData/Roaming/npm/node_modules/pnpm/dist/pnpm.mjs:34109:14)
+    at makeError (file:///C:/Users/FLS/AppData/Roaming/npm/node_modules/pnpm/dist/pnpm.mjs:36416:21)
+    at getSyncResult (file:///C:/Users/FLS/AppData/Roaming/npm/node_modules/pnpm/dist/pnpm.mjs:38260:10)
+    at spawnSubprocessSync (file:///C:/Users/FLS/AppData/Roaming/npm/node_modules/pnpm/dist/pnpm.mjs:38220:14)
+    at execaCoreSync (file:///C:/Users/FLS/AppData/Roaming/npm/node_modules/pnpm/dist/pnpm.mjs:38150:23)
+    at callBoundExeca (file:///C:/Users/FLS/AppData/Roaming/npm/node_modules/pnpm/dist/pnpm.mjs:40678:23)
+    at boundExeca (file:///C:/Users/FLS/AppData/Roaming/npm/node_modules/pnpm/dist/pnpm.mjs:40655:49)
+    at sync (file:///C:/Users/FLS/AppData/Roaming/npm/node_modules/pnpm/dist/pnpm.mjs:40814:10)
+    at runPnpmCli (file:///C:/Users/FLS/AppData/Roaming/npm/node_modules/pnpm/dist/pnpm.mjs:246476:5)
+    at runDepsStatusCheck (file:///C:/Users/FLS/AppData/Roaming/npm/node_modules/pnpm/dist/pnpm.mjs:248210:7)
+
+D:\New folder (4)\NOC-Ticket-Hub>
