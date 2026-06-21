@@ -18,6 +18,12 @@ const Customers = React.lazy(() => import("@/pages/Customers"));
 const Users = React.lazy(() => import("@/pages/Users"));
 const Categories = React.lazy(() => import("@/pages/Categories"));
 const Departments = React.lazy(() => import("@/pages/Departments"));
+const MyTickets = React.lazy(() => import("@/pages/MyTickets"));
+const SlaMonitoring = React.lazy(() => import("@/pages/SlaMonitoring"));
+const DailyReport = React.lazy(() => import("@/pages/DailyReport"));
+const MonthlyReport = React.lazy(() => import("@/pages/MonthlyReport"));
+const EngineerPerformance = React.lazy(() => import("@/pages/EngineerPerformance"));
+const Profile = React.lazy(() => import("@/pages/Profile"));
 
 const queryClient = new QueryClient();
 
@@ -51,6 +57,12 @@ function Router() {
       <Route path="/users"><ProtectedRoute component={Users} /></Route>
       <Route path="/categories"><ProtectedRoute component={Categories} /></Route>
       <Route path="/departments"><ProtectedRoute component={Departments} /></Route>
+      <Route path="/my-tickets"><ProtectedRoute component={MyTickets} /></Route>
+      <Route path="/sla-monitoring"><ProtectedRoute component={SlaMonitoring} /></Route>
+      <Route path="/reports/daily"><ProtectedRoute component={DailyReport} /></Route>
+      <Route path="/reports/monthly"><ProtectedRoute component={MonthlyReport} /></Route>
+      <Route path="/reports/engineer"><ProtectedRoute component={EngineerPerformance} /></Route>
+      <Route path="/profile"><ProtectedRoute component={Profile} /></Route>
       
       <Route component={NotFound} />
     </Switch>

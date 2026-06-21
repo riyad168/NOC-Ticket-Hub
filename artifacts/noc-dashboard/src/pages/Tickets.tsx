@@ -22,13 +22,14 @@ export function StatusBadge({ status }: { status: TicketStatus }) {
   );
 }
 
-export default function Tickets() {
+export default function Tickets({ initialEngineer }: { initialEngineer?: string } = {}) {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   
   const { data: tickets, isLoading } = useListTickets({ 
     search: search || undefined,
-    status: statusFilter !== "all" ? statusFilter : undefined
+    status: statusFilter !== "all" ? statusFilter : undefined,
+    engineer: initialEngineer
   });
 
   return (
