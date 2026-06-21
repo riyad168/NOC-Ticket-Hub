@@ -1,0 +1,148 @@
+D:\NOC-Ticket-Hub>pnpm --filter @workspace/api-server run dev
+[WARN] The "pnpm" field in package.json is no longer read by pnpm. The following keys were ignored: "pnpm.onlyBuiltDependencies". See https://pnpm.io/settings for the new home of each setting.
+$ cross-env NODE_ENV=development pnpm run build && pnpm run start
+[WARN] The "pnpm" field in package.json is no longer read by pnpm. The following keys were ignored: "pnpm.onlyBuiltDependencies". See https://pnpm.io/settings for the new home of each setting.
+$ prisma generate && node ./build.mjs
+◇ injected env (3) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+Loaded Prisma config from prisma.config.ts.
+
+Prisma schema loaded from prisma\schema.prisma.
+
+✔ Generated Prisma Client (v7.8.0) to .\..\..\node_modules\.pnpm\@prisma+client@7.8.0_prisma_6b9b49878f00fc5eb9db6a18103f6144\node_modules\@prisma\client in 296ms
+
+Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+
+
+
+  dist\index.mjs                       2.2mb
+  dist\pino-worker.mjs               153.4kb
+  dist\pino-file.mjs                 142.1kb
+  dist\pino-pretty.mjs               114.6kb
+  dist\thread-stream-worker.mjs        7.3kb
+  dist\index.mjs.map                   3.5mb
+  dist\pino-worker.mjs.map           256.9kb
+  dist\pino-file.mjs.map             229.1kb
+  dist\pino-pretty.mjs.map           204.0kb
+  dist\thread-stream-worker.mjs.map   12.0kb
+
+Done in 618ms
+[WARN] The "pnpm" field in package.json is no longer read by pnpm. The following keys were ignored: "pnpm.onlyBuiltDependencies". See https://pnpm.io/settings for the new home of each setting.
+$ node --enable-source-maps ./dist/index.mjs
+◇ injected env (0) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+◇ injected env (0) from ..\.env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+[04:21:20.218] INFO (9712): NOC Ticket Management System listening
+    port: 8080
+[04:21:35.576] INFO (9712): request completed
+    req: {
+      "id": 1,
+      "method": "GET",
+      "url": "/tickets/create"
+    }
+    res: {
+      "statusCode": 304
+    }
+    responseTime: 590
+Dashboard error: PrismaClientKnownRequestError:
+Invalid `prisma.ticketLog.findMany()` invocation in
+D:\NOC-Ticket-Hub\artifacts\api-server\src\controllers\dashboardController.ts:27:24
+
+  24   orderBy: { createdAt: "desc" },
+  25   include: { customer: true, category: true, assignedEngineer: true },
+  26 }),
+→ 27 prisma.ticketLog.findMany(
+The column `tickets.department_id` does not exist in the current database.
+    at zr.handleRequestError (D:\NOC-Ticket-Hub\node_modules\.pnpm\@prisma+client@7.8.0_prisma_6b9b49878f00fc5eb9db6a18103f6144\node_modules\@prisma\client\src\runtime\RequestHandler.ts:237:13)
+    at zr.handleAndLogRequestError (D:\NOC-Ticket-Hub\node_modules\.pnpm\@prisma+client@7.8.0_prisma_6b9b49878f00fc5eb9db6a18103f6144\node_modules\@prisma\client\src\runtime\RequestHandler.ts:183:12)
+    at zr.request (D:\NOC-Ticket-Hub\node_modules\.pnpm\@prisma+client@7.8.0_prisma_6b9b49878f00fc5eb9db6a18103f6144\node_modules\@prisma\client\src\runtime\RequestHandler.ts:152:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async a (D:\NOC-Ticket-Hub\node_modules\.pnpm\@prisma+client@7.8.0_prisma_6b9b49878f00fc5eb9db6a18103f6144\node_modules\@prisma\client\src\runtime\getPrismaClient.ts:963:24)
+    at async Promise.all (index 9)
+    at async showDashboard (D:\NOC-Ticket-Hub\artifacts\api-server\src\controllers\dashboardController.ts:13:180) {
+  code: 'P2022',
+  meta: {
+    modelName: 'TicketLog',
+    driverAdapterError: DriverAdapterError: ColumnNotFound
+        at PrismaPgAdapter.onError (D:\NOC-Ticket-Hub\node_modules\.pnpm\@prisma+adapter-pg@7.8.0\node_modules\@prisma\adapter-pg\dist\index.mjs:642:11)
+        at PrismaPgAdapter.performIO (D:\NOC-Ticket-Hub\node_modules\.pnpm\@prisma+adapter-pg@7.8.0\node_modules\@prisma\adapter-pg\dist\index.mjs:637:12)
+        at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+        at async PrismaPgAdapter.queryRaw (D:\NOC-Ticket-Hub\node_modules\.pnpm\@prisma+adapter-pg@7.8.0\node_modules\@prisma\adapter-pg\dist\index.mjs:568:30)
+        at async e.interpretNode (D:\NOC-Ticket-Hub\node_modules\.pnpm\@prisma+client@7.8.0_prisma_6b9b49878f00fc5eb9db6a18103f6144\node_modules\@prisma\client-engine-runtime\src\interpreter\query-interpreter.ts:186:26)
+        at async <anonymous> (D:\NOC-Ticket-Hub\node_modules\.pnpm\@prisma+client@7.8.0_prisma_6b9b49878f00fc5eb9db6a18103f6144\node_modules\@prisma\client-engine-runtime\src\interpreter\query-interpreter.ts:246:28)
+        at async Promise.all (index 0)
+        at async e.interpretNode (D:\NOC-Ticket-Hub\node_modules\.pnpm\@prisma+client@7.8.0_prisma_6b9b49878f00fc5eb9db6a18103f6144\node_modules\@prisma\client-engine-runtime\src\interpreter\query-interpreter.ts:243:26)
+        at async e.interpretNode (D:\NOC-Ticket-Hub\node_modules\.pnpm\@prisma+client@7.8.0_prisma_6b9b49878f00fc5eb9db6a18103f6144\node_modules\@prisma\client-engine-runtime\src\interpreter\query-interpreter.ts:272:41)
+        at async e.run (D:\NOC-Ticket-Hub\node_modules\.pnpm\@prisma+client@7.8.0_prisma_6b9b49878f00fc5eb9db6a18103f6144\node_modules\@prisma\client-engine-runtime\src\interpreter\query-interpreter.ts:94:23) {
+      cause: [Object]
+    }
+  },
+  clientVersion: '7.8.0'
+}
+[04:21:37.909] INFO (9712): request completed
+    req: {
+      "id": 2,
+      "method": "GET",
+      "url": "/dashboard"
+    }
+    res: {
+      "statusCode": 304
+    }
+    responseTime: 258
+PrismaClientKnownRequestError:
+Invalid `prisma.ticket.findMany()` invocation in
+D:\NOC-Ticket-Hub\artifacts\api-server\src\controllers\ticketController.ts:29:21
+
+  26 }
+  27
+  28 const [tickets, categories, engineers] = await Promise.all([
+→ 29   prisma.ticket.findMany(
+The column `tickets.department_id` does not exist in the current database.
+    at zr.handleRequestError (D:\NOC-Ticket-Hub\node_modules\.pnpm\@prisma+client@7.8.0_prisma_6b9b49878f00fc5eb9db6a18103f6144\node_modules\@prisma\client\src\runtime\RequestHandler.ts:237:13)
+    at zr.handleAndLogRequestError (D:\NOC-Ticket-Hub\node_modules\.pnpm\@prisma+client@7.8.0_prisma_6b9b49878f00fc5eb9db6a18103f6144\node_modules\@prisma\client\src\runtime\RequestHandler.ts:183:12)
+    at zr.request (D:\NOC-Ticket-Hub\node_modules\.pnpm\@prisma+client@7.8.0_prisma_6b9b49878f00fc5eb9db6a18103f6144\node_modules\@prisma\client\src\runtime\RequestHandler.ts:152:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async a (D:\NOC-Ticket-Hub\node_modules\.pnpm\@prisma+client@7.8.0_prisma_6b9b49878f00fc5eb9db6a18103f6144\node_modules\@prisma\client\src\runtime\getPrismaClient.ts:963:24)
+    at async Promise.all (index 0)
+    at async listTickets (D:\NOC-Ticket-Hub\artifacts\api-server\src\controllers\ticketController.ts:28:46) {
+  code: 'P2022',
+  meta: {
+    modelName: 'Ticket',
+    driverAdapterError: DriverAdapterError: ColumnNotFound
+        at PrismaPgAdapter.onError (D:\NOC-Ticket-Hub\node_modules\.pnpm\@prisma+adapter-pg@7.8.0\node_modules\@prisma\adapter-pg\dist\index.mjs:642:11)
+        at PrismaPgAdapter.performIO (D:\NOC-Ticket-Hub\node_modules\.pnpm\@prisma+adapter-pg@7.8.0\node_modules\@prisma\adapter-pg\dist\index.mjs:637:12)
+        at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+        at async PrismaPgAdapter.queryRaw (D:\NOC-Ticket-Hub\node_modules\.pnpm\@prisma+adapter-pg@7.8.0\node_modules\@prisma\adapter-pg\dist\index.mjs:568:30)
+        at async e.interpretNode (D:\NOC-Ticket-Hub\node_modules\.pnpm\@prisma+client@7.8.0_prisma_6b9b49878f00fc5eb9db6a18103f6144\node_modules\@prisma\client-engine-runtime\src\interpreter\query-interpreter.ts:186:26)
+        at async e.interpretNode (D:\NOC-Ticket-Hub\node_modules\.pnpm\@prisma+client@7.8.0_prisma_6b9b49878f00fc5eb9db6a18103f6144\node_modules\@prisma\client-engine-runtime\src\interpreter\query-interpreter.ts:128:29)
+        at async e.interpretNode (D:\NOC-Ticket-Hub\node_modules\.pnpm\@prisma+client@7.8.0_prisma_6b9b49878f00fc5eb9db6a18103f6144\node_modules\@prisma\client-engine-runtime\src\interpreter\query-interpreter.ts:272:41)
+        at async e.run (D:\NOC-Ticket-Hub\node_modules\.pnpm\@prisma+client@7.8.0_prisma_6b9b49878f00fc5eb9db6a18103f6144\node_modules\@prisma\client-engine-runtime\src\interpreter\query-interpreter.ts:94:23)
+        at async e.execute (D:\NOC-Ticket-Hub\node_modules\.pnpm\@prisma+client@7.8.0_prisma_6b9b49878f00fc5eb9db6a18103f6144\node_modules\@prisma\client\src\runtime\core\engines\client\LocalExecutor.ts:81:12)
+        at async jt.request (D:\NOC-Ticket-Hub\node_modules\.pnpm\@prisma+client@7.8.0_prisma_6b9b49878f00fc5eb9db6a18103f6144\node_modules\@prisma\client\src\runtime\core\engines\client\ClientEngine.ts:504:22) {
+      cause: [Object]
+    }
+  },
+  clientVersion: '7.8.0'
+}
+[04:21:39.484] INFO (9712): request errored
+    req: {
+      "id": 3,
+      "method": "GET",
+      "url": "/tickets"
+    }
+    res: {
+      "statusCode": 500
+    }
+    responseTime: 19
+    err: {
+      "type": "Error",
+      "message": "failed with status code 500",
+      "stack":
+          Error: failed with status code 500
+              at onResFinished (D:\NOC-Ticket-Hub\node_modules\.pnpm\pino-http@10.5.0\node_modules\pino-http\logger.js:115:39)
+              at ServerResponse.onResponseComplete (D:\NOC-Ticket-Hub\node_modules\.pnpm\pino-http@10.5.0\node_modules\pino-http\logger.js:178:14)
+              at ServerResponse.emit (node:events:520:22)
+              at onFinish (node:_http_outgoing:1026:10)
+              at callback (node:internal/streams/writable:764:21)
+              at afterWrite (node:internal/streams/writable:708:5)
+              at afterWriteTick (node:internal/streams/writable:694:10)
+              at process.processTicksAndRejections (node:internal/process/task_queues:89:21)
+    }
