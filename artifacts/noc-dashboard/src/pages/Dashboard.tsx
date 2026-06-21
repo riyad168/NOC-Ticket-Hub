@@ -41,7 +41,7 @@ export default function Dashboard() {
   const dashArray = `${slaPercent}, 100`;
 
   return (
-    <div className="h-full flex flex-col gap-3">
+    <div className="flex flex-col gap-3 overflow-hidden" style={{ height: 'calc(100dvh - 64px - 2rem)' }}>
 
       {/* Row 1 — Stat Cards */}
       <div className="grid grid-cols-4 gap-3 shrink-0">
