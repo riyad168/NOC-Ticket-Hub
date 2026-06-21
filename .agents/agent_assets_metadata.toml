@@ -1,0 +1,8 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "PSnbSSSA84apk7hQCXHiQ"
+uri = "file://UBUNTU-SETUP-GUIDE.md"
+type = "text"
+title = "Ubuntu Server Setup Guide"

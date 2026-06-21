@@ -11,8 +11,12 @@
         <div class="d-flex align-items-center gap-3">
           <div class="icon" style="background:#dbeafe;color:#3b82f6;"><i class="bi bi-ticket-detailed"></i></div>
           <div>
-            <div class="count"><%= stats.total.toLocaleString() %></div>
             <div class="label">Total Tickets</div>
+            <div class="count"><%= stats.total.toLocaleString() %></div>
+            <div class="change" style="color:<%= stats.totalChange >= 0 ? '#16a34a' : '#dc2626' %>">
+              <i class="bi bi-arrow-<%= stats.totalChange >= 0 ? 'up' : 'down' %>-right"></i>
+              <%= Math.abs(stats.totalChange) %>% from last month
+            </div>
           </div>
         </div>
       </div>
@@ -22,8 +26,12 @@
         <div class="d-flex align-items-center gap-3">
           <div class="icon" style="background:#fef9c3;color:#ca8a04;"><i class="bi bi-hourglass-split"></i></div>
           <div>
-            <div class="count"><%= stats.open.toLocaleString() %></div>
             <div class="label">Open Tickets</div>
+            <div class="count"><%= stats.open.toLocaleString() %></div>
+            <div class="change" style="color:<%= stats.openChange >= 0 ? '#16a34a' : '#dc2626' %>">
+              <i class="bi bi-arrow-<%= stats.openChange >= 0 ? 'up' : 'down' %>-right"></i>
+              <%= Math.abs(stats.openChange) %>% from last month
+            </div>
           </div>
         </div>
       </div>
@@ -33,8 +41,12 @@
         <div class="d-flex align-items-center gap-3">
           <div class="icon" style="background:#dcfce7;color:#16a34a;"><i class="bi bi-check-circle"></i></div>
           <div>
-            <div class="count"><%= stats.resolved.toLocaleString() %></div>
             <div class="label">Resolved Tickets</div>
+            <div class="count"><%= stats.resolved.toLocaleString() %></div>
+            <div class="change" style="color:<%= stats.resolvedChange >= 0 ? '#16a34a' : '#dc2626' %>">
+              <i class="bi bi-arrow-<%= stats.resolvedChange >= 0 ? 'up' : 'down' %>-right"></i>
+              <%= Math.abs(stats.resolvedChange) %>% from last month
+            </div>
           </div>
         </div>
       </div>
@@ -44,123 +56,215 @@
         <div class="d-flex align-items-center gap-3">
           <div class="icon" style="background:#fee2e2;color:#dc2626;"><i class="bi bi-exclamation-triangle"></i></div>
           <div>
-            <div class="count"><%= stats.slaBreached.toLocaleString() %></div>
             <div class="label">SLA Breach Tickets</div>
+            <div class="count"><%= stats.slaBreached.toLocaleString() %></div>
+            <div class="change" style="color:<%= stats.slaChange <= 0 ? '#16a34a' : '#dc2626' %>">
+              <i class="bi bi-arrow-<%= stats.slaChange <= 0 ? 'down' : 'up' %>-right"></i>
+              <%= Math.abs(stats.slaChange) %>% from last month
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
 
+  <!-- Charts Row -->
   <div class="row g-3 mb-4">
-    <!-- Category Chart -->
-    <div class="col-lg-5">
+    <!-- Line Chart -->
+    <div class="col-lg-8">
       <div class="card h-100">
         <div class="card-body">
-          <h6 class="fw-600 mb-3" style="font-size:14px;">Tickets by Category</h6>
-          <canvas id="categoryChart" height="220"></canvas>
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h6 class="fw-600 mb-0" style="font-size:14px;">Tickets Overview</h6>
+            <span class="badge bg-light text-secondary" style="font-size:11px;border:1px solid #e2e8f0;">Last 30 Days</span>
+          </div>
+          <canvas id="lineChart" height="200"></canvas>
         </div>
       </div>
     </div>
+    <!-- Donut Chart -->
+    <div class="col-lg-4">
+      <div class="card h-100">
+        <div class="card-body">
+          <h6 class="fw-600 mb-3" style="font-size:14px;">Tickets by Category</h6>
+          <% if (categoryData.filter(d => d.count > 0).length === 0) { %>
+          <div class="text-center text-muted py-4"><i class="bi bi-pie-chart fs-2 d-block mb-2"></i>No data yet</div>
+          <% } else { %>
+          <canvas id="categoryChart" height="180"></canvas>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Activities + Latest Tickets + SLA -->
+  <div class="row g-3">
     <!-- Recent Activities -->
-    <div class="col-lg-7">
+    <div class="col-lg-4">
       <div class="card h-100">
         <div class="card-body">
           <h6 class="fw-600 mb-3" style="font-size:14px;">Recent Activities</h6>
           <% if (recentLogs.length === 0) { %>
           <div class="text-center text-muted py-4"><i class="bi bi-clock-history fs-2 d-block mb-2"></i>No recent activities</div>
           <% } %>
-          <% recentLogs.forEach(log => { %>
-          <div class="d-flex align-items-start gap-3 mb-3">
-            <div style="width:36px;height:36px;background:#eff6ff;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-              <i class="bi bi-activity text-primary" style="font-size:15px;"></i>
+          <% recentLogs.forEach(log => {
+            let iconBg = '#eff6ff', iconColor = '#3b82f6', iconClass = 'bi-plus-circle';
+            if (log.action.includes('Updated')) { iconBg='#fef9c3'; iconColor='#ca8a04'; iconClass='bi-pencil'; }
+            else if (log.action.includes('Resolved') || log.action.includes('Closed')) { iconBg='#dcfce7'; iconColor='#16a34a'; iconClass='bi-check-circle'; }
+            else if (log.action.includes('Assigned')) { iconBg='#f0fdf4'; iconColor='#16a34a'; iconClass='bi-person-check'; }
+            else if (log.action.includes('Remark')) { iconBg='#f1f5f9'; iconColor='#64748b'; iconClass='bi-chat-left-text'; }
+          %>
+          <div class="d-flex align-items-start gap-3 mb-3 pb-3" style="border-bottom:1px solid #f1f5f9;">
+            <div style="width:36px;height:36px;background:<%= iconBg %>;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <i class="bi <%= iconClass %>" style="font-size:14px;color:<%= iconColor %>;"></i>
             </div>
             <div style="flex:1;min-width:0;">
               <div style="font-size:13px;font-weight:600;color:#0f172a;"><%= log.action %></div>
-              <div style="font-size:12px;color:#64748b;"><%= log.ticket.ticketNumber %> — <%= log.description %></div>
+              <div style="font-size:12px;color:#64748b;"><%= log.ticket.ticketNumber %> by <%= log.user.name %></div>
             </div>
             <div style="font-size:11px;color:#94a3b8;white-space:nowrap;">
-              <%= new Date(log.createdAt).toLocaleTimeString('en-US', {hour:'2-digit',minute:'2-digit'}) %>
+              <%
+                const diff = Math.round((Date.now() - new Date(log.createdAt).getTime()) / 60000);
+                let timeAgo = diff < 1 ? 'just now' : diff < 60 ? diff + ' min ago' : Math.round(diff/60) + ' hr ago';
+              %>
+              <%= timeAgo %>
             </div>
           </div>
           <% }) %>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- Latest Tickets Table -->
-  <div class="card">
-    <div class="card-body">
-      <div class="d-flex align-items-center justify-content-between mb-3">
-        <h6 class="fw-600 mb-0" style="font-size:14px;">Latest Tickets</h6>
-        <a href="/tickets" class="btn btn-sm btn-outline-primary" style="font-size:12px;">View All</a>
-      </div>
-      <div class="table-responsive">
-        <table class="table table-hover mb-0">
-          <thead>
-            <tr>
-              <th>Ticket No</th>
-              <th>Customer</th>
-              <th>Category</th>
-              <th>Status</th>
-              <th>Engineer</th>
-              <th>Start Time</th>
-              <th>SLA</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% if (recentTickets.length === 0) { %>
-            <tr><td colspan="8" class="text-center text-muted py-4">No tickets found</td></tr>
-            <% } %>
-            <% recentTickets.forEach(ticket => { %>
-            <tr>
-              <td><span class="fw-600 text-primary"><%= ticket.ticketNumber %></span></td>
-              <td><%= ticket.customer.name %></td>
-              <td><span class="badge bg-secondary bg-opacity-10 text-secondary" style="font-size:11px;"><%= ticket.category.name %></span></td>
-              <td>
-                <% const s = ticket.status.toLowerCase().replace('_','_'); %>
-                <span class="badge-status badge-<%= ticket.status.toLowerCase().replace(' ','_') %>"><%= ticket.status.replace('_',' ') %></span>
-              </td>
-              <td><%= ticket.assignedEngineer ? ticket.assignedEngineer.name : '<span class="text-muted">—</span>' %></td>
-              <td style="font-size:12px;"><%= new Date(ticket.createdAt).toLocaleString('en-US', {month:'short',day:'2-digit',hour:'2-digit',minute:'2-digit'}) %></td>
-              <td>
-                <% if (ticket.slaBreached) { %>
-                <span class="badge-status badge-sla">SLA Breach</span>
-                <% } else { %>
-                <span class="badge-status badge-within">Within SLA</span>
+    <!-- Latest Tickets -->
+    <div class="col-lg-5">
+      <div class="card h-100">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h6 class="fw-600 mb-0" style="font-size:14px;">Latest Tickets</h6>
+            <a href="/tickets" class="btn btn-sm btn-outline-primary" style="font-size:12px;">View All</a>
+          </div>
+          <div class="table-responsive">
+            <table class="table table-hover mb-0" style="font-size:12.5px;">
+              <thead>
+                <tr>
+                  <th>Ticket No</th>
+                  <th>Customer</th>
+                  <th>Status</th>
+                  <th>SLA</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <% if (recentTickets.length === 0) { %>
+                <tr><td colspan="5" class="text-center text-muted py-4">No tickets found</td></tr>
                 <% } %>
-              </td>
-              <td>
-                <a href="/tickets/<%= ticket.id %>" class="btn btn-sm btn-light" title="View"><i class="bi bi-eye"></i></a>
-              </td>
-            </tr>
-            <% }) %>
-          </tbody>
-        </table>
+                <% recentTickets.slice(0,8).forEach(ticket => { %>
+                <tr>
+                  <td><a href="/tickets/<%= ticket.id %>" class="fw-600 text-primary text-decoration-none"><%= ticket.ticketNumber %></a></td>
+                  <td style="max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"><%= ticket.customer.name %></td>
+                  <td><span class="badge-status badge-<%= ticket.status.toLowerCase().replace('_','_') %>"><%= ticket.status.replace('_',' ') %></span></td>
+                  <td>
+                    <% if (ticket.slaBreached) { %>
+                    <span class="badge-status badge-sla" style="font-size:10px;">Breach</span>
+                    <% } else { %>
+                    <span class="badge-status badge-within" style="font-size:10px;">OK</span>
+                    <% } %>
+                  </td>
+                  <td><a href="/tickets/<%= ticket.id %>" class="btn btn-sm btn-light"><i class="bi bi-eye"></i></a></td>
+                </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLA Status -->
+    <div class="col-lg-3">
+      <div class="card h-100">
+        <div class="card-body text-center">
+          <h6 class="fw-600 mb-3" style="font-size:14px;">SLA Status</h6>
+          <canvas id="slaGauge" height="160"></canvas>
+          <div class="mt-2">
+            <div style="font-size:32px;font-weight:700;color:#0f172a;"><%= stats.slaBreached %></div>
+            <div style="font-size:12px;color:#64748b;">SLA Breach Tickets</div>
+            <div style="font-size:12px;color:#94a3b8;margin-top:4px;">Total <strong><%= stats.total %></strong> Tickets</div>
+          </div>
+          <a href="/tickets?status=Open" class="btn btn-outline-danger btn-sm mt-3 w-100" style="font-size:12px;">
+            <i class="bi bi-exclamation-circle me-1"></i>View SLA Issues
+          </a>
+        </div>
       </div>
     </div>
   </div>
+
 </div>
 <%- include('../partials/footer') %>
 </div>
 
 <script>
+const chartData = <%- JSON.stringify(chartData) %>;
 const categoryData = <%- JSON.stringify(categoryData) %>;
-if (categoryData.length > 0) {
-  const ctx = document.getElementById('categoryChart').getContext('2d');
-  new Chart(ctx, {
+const slaBreached = <%= stats.slaBreached %>;
+const totalTickets = <%= stats.total %>;
+
+// Line Chart
+const lineCtx = document.getElementById('lineChart').getContext('2d');
+new Chart(lineCtx, {
+  type: 'line',
+  data: {
+    labels: chartData.days,
+    datasets: [
+      { label: 'Open', data: chartData.openCounts, borderColor: '#3b82f6', backgroundColor: 'rgba(59,130,246,0.08)', tension: 0.4, fill: true, pointRadius: 3 },
+      { label: 'Resolved', data: chartData.resolvedCounts, borderColor: '#10b981', backgroundColor: 'rgba(16,185,129,0.08)', tension: 0.4, fill: true, pointRadius: 3 },
+      { label: 'Closed', data: chartData.closedCounts, borderColor: '#94a3b8', backgroundColor: 'rgba(148,163,184,0.08)', tension: 0.4, fill: true, pointRadius: 3 },
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { position: 'top', labels: { boxWidth: 10, font: { size: 12 }, padding: 16 } } },
+    scales: {
+      x: { grid: { display: false }, ticks: { font: { size: 11 }, maxTicksLimit: 10 } },
+      y: { beginAtZero: true, grid: { color: '#f1f5f9' }, ticks: { font: { size: 11 }, stepSize: 1 } }
+    }
+  }
+});
+
+// Donut Chart
+const activeCats = categoryData.filter(d => d.count > 0);
+if (activeCats.length > 0) {
+  const catCtx = document.getElementById('categoryChart').getContext('2d');
+  const colors = ['#3b82f6','#10b981','#f59e0b','#ef4444','#8b5cf6','#06b6d4','#f97316','#84cc16'];
+  const total = activeCats.reduce((s, d) => s + d.count, 0);
+  new Chart(catCtx, {
     type: 'doughnut',
     data: {
-      labels: categoryData.map(d => d.name),
-      datasets: [{ data: categoryData.map(d => d.count), backgroundColor: ['#3b82f6','#10b981','#f59e0b','#ef4444','#8b5cf6','#06b6d4'], borderWidth: 0, hoverOffset: 6 }]
+      labels: activeCats.map(d => `${d.name} ${Math.round(d.count/total*100)}% (${d.count})`),
+      datasets: [{ data: activeCats.map(d => d.count), backgroundColor: colors.slice(0, activeCats.length), borderWidth: 0, hoverOffset: 6 }]
     },
     options: {
       responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { position: 'right', labels: { font: { size: 12 }, boxWidth: 12, padding: 12 } } },
-      cutout: '70%'
+      plugins: { legend: { position: 'bottom', labels: { font: { size: 11 }, boxWidth: 10, padding: 8 } } },
+      cutout: '65%'
     }
   });
 }
+
+// SLA Gauge
+const slaCtx = document.getElementById('slaGauge').getContext('2d');
+const safe = Math.max(0, totalTickets - slaBreached);
+new Chart(slaCtx, {
+  type: 'doughnut',
+  data: {
+    labels: ['SLA Breach', 'Within SLA'],
+    datasets: [{ data: [slaBreached || 0, safe || 1], backgroundColor: ['#ef4444', '#e2e8f0'], borderWidth: 0 }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false }, tooltip: { enabled: true } },
+    cutout: '75%',
+    rotation: -90, circumference: 180
+  }
+});
 </script>

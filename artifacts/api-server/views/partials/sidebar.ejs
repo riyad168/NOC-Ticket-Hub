@@ -20,14 +20,17 @@
     <a href="/tickets" class="nav-link <%= title === 'All Tickets' ? 'active' : '' %>">
       <i class="bi bi-ticket-detailed"></i> All Tickets
     </a>
-    <% if (user && user.role !== 'admin') { %>
-    <a href="/tickets?assignedTo=me" class="nav-link">
+    <% if (user && user.role === 'noc_engineer') { %>
+    <a href="/tickets?engineer=<%= user.id %>" class="nav-link">
       <i class="bi bi-person-check"></i> My Tickets
     </a>
     <% } %>
+    <a href="/tickets?sla=breach" class="nav-link">
+      <i class="bi bi-alarm"></i> SLA Monitoring
+    </a>
 
-    <div class="nav-section">Reports</div>
     <% if (user && (user.role === 'admin' || user.role === 'manager')) { %>
+    <div class="nav-section">Reports</div>
     <a href="/reports/daily" class="nav-link <%= title === 'Daily Report' ? 'active' : '' %>">
       <i class="bi bi-calendar-day"></i> Daily Report
     </a>
@@ -53,6 +56,9 @@
     <% } %>
 
     <div class="nav-section">Settings</div>
+    <a href="#" class="nav-link">
+      <i class="bi bi-person-circle"></i> Profile
+    </a>
   </div>
 
   <div class="sidebar-footer">
