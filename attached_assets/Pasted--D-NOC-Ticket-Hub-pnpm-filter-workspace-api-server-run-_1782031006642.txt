@@ -1,0 +1,110 @@
+
+D:\NOC-Ticket-Hub>pnpm --filter @workspace/api-server run dev
+$ cross-env NODE_ENV=development pnpm run build && pnpm run start
+$ node ./build.mjs
+
+  dist\index.mjs                       2.1mb
+  dist\pino-worker.mjs               153.4kb
+  dist\pino-file.mjs                 142.1kb
+  dist\pino-pretty.mjs               114.6kb
+  dist\thread-stream-worker.mjs        7.3kb
+  dist\index.mjs.map                   3.4mb
+  dist\pino-worker.mjs.map           256.9kb
+  dist\pino-file.mjs.map             229.1kb
+  dist\pino-pretty.mjs.map           204.0kb
+  dist\thread-stream-worker.mjs.map   12.0kb
+
+Done in 1247ms
+$ node --enable-source-maps ./dist/index.mjs
+◇ injected env (0) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (0) from ..\.env // tip: ⌘ override existing { override: true }
+[14:35:59.544] INFO (17916): NOC Ticket Management System listening
+    port: 8080
+Login error: PrismaClientKnownRequestError:
+Invalid `prisma.user.findUnique()` invocation in
+D:\NOC-Ticket-Hub\artifacts\api-server\src\controllers\authController.ts:15:36
+
+  12 export async function login(req: Request, res: Response): Promise<void> {
+  13   const { email, password } = req.body as { email: string; password: string };
+  14   try {
+→ 15     const user = await prisma.user.findUnique(
+Can't reach database server at helium
+    at zr.handleRequestError (D:\NOC-Ticket-Hub\node_modules\.pnpm\@prisma+client@7.8.0_prisma_6b9b49878f00fc5eb9db6a18103f6144\node_modules\@prisma\client\src\runtime\RequestHandler.ts:237:13)
+    at zr.handleAndLogRequestError (D:\NOC-Ticket-Hub\node_modules\.pnpm\@prisma+client@7.8.0_prisma_6b9b49878f00fc5eb9db6a18103f6144\node_modules\@prisma\client\src\runtime\RequestHandler.ts:183:12)
+    at zr.request (D:\NOC-Ticket-Hub\node_modules\.pnpm\@prisma+client@7.8.0_prisma_6b9b49878f00fc5eb9db6a18103f6144\node_modules\@prisma\client\src\runtime\RequestHandler.ts:152:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async a (D:\NOC-Ticket-Hub\node_modules\.pnpm\@prisma+client@7.8.0_prisma_6b9b49878f00fc5eb9db6a18103f6144\node_modules\@prisma\client\src\runtime\getPrismaClient.ts:963:24)
+    at async login (D:\NOC-Ticket-Hub\artifacts\api-server\src\controllers\authController.ts:15:18) {
+  code: 'P1001',
+  meta: {
+    modelName: 'User',
+    driverAdapterError: DriverAdapterError: DatabaseNotReachable
+        at PrismaPgAdapter.onError (D:\NOC-Ticket-Hub\node_modules\.pnpm\@prisma+adapter-pg@7.8.0\node_modules\@prisma\adapter-pg\dist\index.mjs:642:11)
+        at PrismaPgAdapter.performIO (D:\NOC-Ticket-Hub\node_modules\.pnpm\@prisma+adapter-pg@7.8.0\node_modules\@prisma\adapter-pg\dist\index.mjs:637:12)
+        at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+        at async PrismaPgAdapter.queryRaw (D:\NOC-Ticket-Hub\node_modules\.pnpm\@prisma+adapter-pg@7.8.0\node_modules\@prisma\adapter-pg\dist\index.mjs:568:30)
+        at async e.interpretNode (D:\NOC-Ticket-Hub\node_modules\.pnpm\@prisma+client@7.8.0_prisma_6b9b49878f00fc5eb9db6a18103f6144\node_modules\@prisma\client-engine-runtime\src\interpreter\query-interpreter.ts:186:26)
+        at async e.interpretNode (D:\NOC-Ticket-Hub\node_modules\.pnpm\@prisma+client@7.8.0_prisma_6b9b49878f00fc5eb9db6a18103f6144\node_modules\@prisma\client-engine-runtime\src\interpreter\query-interpreter.ts:213:41)
+        at async e.interpretNode (D:\NOC-Ticket-Hub\node_modules\.pnpm\@prisma+client@7.8.0_prisma_6b9b49878f00fc5eb9db6a18103f6144\node_modules\@prisma\client-engine-runtime\src\interpreter\query-interpreter.ts:272:41)
+        at async e.run (D:\NOC-Ticket-Hub\node_modules\.pnpm\@prisma+client@7.8.0_prisma_6b9b49878f00fc5eb9db6a18103f6144\node_modules\@prisma\client-engine-runtime\src\interpreter\query-interpreter.ts:94:23)
+        at async e.execute (D:\NOC-Ticket-Hub\node_modules\.pnpm\@prisma+client@7.8.0_prisma_6b9b49878f00fc5eb9db6a18103f6144\node_modules\@prisma\client\src\runtime\core\engines\client\LocalExecutor.ts:81:12)
+        at async jt.request (D:\NOC-Ticket-Hub\node_modules\.pnpm\@prisma+client@7.8.0_prisma_6b9b49878f00fc5eb9db6a18103f6144\node_modules\@prisma\client\src\runtime\core\engines\client\ClientEngine.ts:504:22) {
+      cause: [Object]
+    }
+  },
+  clientVersion: '7.8.0'
+}
+[14:36:11.108] INFO (17916): request completed
+    req: {
+      "id": 1,
+      "method": "POST",
+      "url": "/login"
+    }
+    res: {
+      "statusCode": 200
+    }
+    responseTime: 3059
+Login error: PrismaClientKnownRequestError:
+Invalid `prisma.user.findUnique()` invocation in
+D:\NOC-Ticket-Hub\artifacts\api-server\src\controllers\authController.ts:15:36
+
+  12 export async function login(req: Request, res: Response): Promise<void> {
+  13   const { email, password } = req.body as { email: string; password: string };
+  14   try {
+→ 15     const user = await prisma.user.findUnique(
+Can't reach database server at helium
+    at zr.handleRequestError (D:\NOC-Ticket-Hub\node_modules\.pnpm\@prisma+client@7.8.0_prisma_6b9b49878f00fc5eb9db6a18103f6144\node_modules\@prisma\client\src\runtime\RequestHandler.ts:237:13)
+    at zr.handleAndLogRequestError (D:\NOC-Ticket-Hub\node_modules\.pnpm\@prisma+client@7.8.0_prisma_6b9b49878f00fc5eb9db6a18103f6144\node_modules\@prisma\client\src\runtime\RequestHandler.ts:183:12)
+    at zr.request (D:\NOC-Ticket-Hub\node_modules\.pnpm\@prisma+client@7.8.0_prisma_6b9b49878f00fc5eb9db6a18103f6144\node_modules\@prisma\client\src\runtime\RequestHandler.ts:152:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async a (D:\NOC-Ticket-Hub\node_modules\.pnpm\@prisma+client@7.8.0_prisma_6b9b49878f00fc5eb9db6a18103f6144\node_modules\@prisma\client\src\runtime\getPrismaClient.ts:963:24)
+    at async login (D:\NOC-Ticket-Hub\artifacts\api-server\src\controllers\authController.ts:15:18) {
+  code: 'P1001',
+  meta: {
+    modelName: 'User',
+    driverAdapterError: DriverAdapterError: DatabaseNotReachable
+        at PrismaPgAdapter.onError (D:\NOC-Ticket-Hub\node_modules\.pnpm\@prisma+adapter-pg@7.8.0\node_modules\@prisma\adapter-pg\dist\index.mjs:642:11)
+        at PrismaPgAdapter.performIO (D:\NOC-Ticket-Hub\node_modules\.pnpm\@prisma+adapter-pg@7.8.0\node_modules\@prisma\adapter-pg\dist\index.mjs:637:12)
+        at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+        at async PrismaPgAdapter.queryRaw (D:\NOC-Ticket-Hub\node_modules\.pnpm\@prisma+adapter-pg@7.8.0\node_modules\@prisma\adapter-pg\dist\index.mjs:568:30)
+        at async e.interpretNode (D:\NOC-Ticket-Hub\node_modules\.pnpm\@prisma+client@7.8.0_prisma_6b9b49878f00fc5eb9db6a18103f6144\node_modules\@prisma\client-engine-runtime\src\interpreter\query-interpreter.ts:186:26)
+        at async e.interpretNode (D:\NOC-Ticket-Hub\node_modules\.pnpm\@prisma+client@7.8.0_prisma_6b9b49878f00fc5eb9db6a18103f6144\node_modules\@prisma\client-engine-runtime\src\interpreter\query-interpreter.ts:213:41)
+        at async e.interpretNode (D:\NOC-Ticket-Hub\node_modules\.pnpm\@prisma+client@7.8.0_prisma_6b9b49878f00fc5eb9db6a18103f6144\node_modules\@prisma\client-engine-runtime\src\interpreter\query-interpreter.ts:272:41)
+        at async e.run (D:\NOC-Ticket-Hub\node_modules\.pnpm\@prisma+client@7.8.0_prisma_6b9b49878f00fc5eb9db6a18103f6144\node_modules\@prisma\client-engine-runtime\src\interpreter\query-interpreter.ts:94:23)
+        at async e.execute (D:\NOC-Ticket-Hub\node_modules\.pnpm\@prisma+client@7.8.0_prisma_6b9b49878f00fc5eb9db6a18103f6144\node_modules\@prisma\client\src\runtime\core\engines\client\LocalExecutor.ts:81:12)
+        at async jt.request (D:\NOC-Ticket-Hub\node_modules\.pnpm\@prisma+client@7.8.0_prisma_6b9b49878f00fc5eb9db6a18103f6144\node_modules\@prisma\client\src\runtime\core\engines\client\ClientEngine.ts:504:22) {
+      cause: [Object]
+    }
+  },
+  clientVersion: '7.8.0'
+}
+[14:36:23.288] INFO (17916): request completed
+    req: {
+      "id": 2,
+      "method": "POST",
+      "url": "/login"
+    }
+    res: {
+      "statusCode": 200
+    }
+    responseTime: 2970
