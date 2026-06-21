@@ -169,7 +169,7 @@ export const Shell: React.FC<{ children: React.ReactNode }> = ({ children }) => 
         </header>
 
         {/* Page Content */}
-        <main className="flex-1 overflow-y-auto p-4 min-h-0">
+        <main className="flex-1 overflow-hidden p-4 min-h-0">
           {children}
         </main>
       </div>

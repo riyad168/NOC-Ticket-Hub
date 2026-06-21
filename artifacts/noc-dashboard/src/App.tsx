@@ -8,7 +8,6 @@ import { Shell } from "@/components/layout/Shell";
 import NotFound from "@/pages/not-found";
 import { Loader2 } from "lucide-react";
 
-// Lazy load pages
 const Login = React.lazy(() => import("@/pages/Login"));
 const Dashboard = React.lazy(() => import("@/pages/Dashboard"));
 const Tickets = React.lazy(() => import("@/pages/Tickets"));
@@ -27,11 +26,29 @@ const Profile = React.lazy(() => import("@/pages/Profile"));
 
 const queryClient = new QueryClient();
 
-function ProtectedRoute({ component: Component }: { component: React.ComponentType }) {
+const loader = (
+  <div className="flex items-center justify-center h-full">
+    <Loader2 className="animate-spin text-primary h-8 w-8" />
+  </div>
+);
+
+function ProtectedRoute({
+  component: Component,
+  fixedLayout = false,
+}: {
+  component: React.ComponentType;
+  fixedLayout?: boolean;
+}) {
   return (
     <Shell>
-      <React.Suspense fallback={<div className="flex items-center justify-center h-full"><Loader2 className="animate-spin text-primary h-8 w-8"/></div>}>
-        <Component />
+      <React.Suspense fallback={loader}>
+        {fixedLayout ? (
+          <Component />
+        ) : (
+          <div className="h-full overflow-y-auto">
+            <Component />
+          </div>
+        )}
       </React.Suspense>
     </Shell>
   );
@@ -48,8 +65,11 @@ function Router() {
           <Login />
         </React.Suspense>
       </Route>
-      
-      <Route path="/dashboard"><ProtectedRoute component={Dashboard} /></Route>
+
+      {/* Dashboard: fixed layout — fills viewport, no outer scroll */}
+      <Route path="/dashboard"><ProtectedRoute component={Dashboard} fixedLayout={true} /></Route>
+
+      {/* All other pages: scrollable wrapper */}
       <Route path="/tickets"><ProtectedRoute component={Tickets} /></Route>
       <Route path="/tickets/new"><ProtectedRoute component={TicketNew} /></Route>
       <Route path="/tickets/:id"><ProtectedRoute component={TicketDetail} /></Route>
@@ -63,7 +83,7 @@ function Router() {
       <Route path="/reports/monthly"><ProtectedRoute component={MonthlyReport} /></Route>
       <Route path="/reports/engineer"><ProtectedRoute component={EngineerPerformance} /></Route>
       <Route path="/profile"><ProtectedRoute component={Profile} /></Route>
-      
+
       <Route component={NotFound} />
     </Switch>
   );
