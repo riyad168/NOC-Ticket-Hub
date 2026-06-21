@@ -4,7 +4,7 @@ import { fileURLToPath } from "url";
 import { existsSync } from "fs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-for (const rel of ["../../.env", "../../../.env"]) {
+for (const rel of ["../.env", "../../.env", "../../../.env"]) {
   const p = resolve(__dirname, rel);
   if (existsSync(p)) { config({ path: p, override: false, quiet: true }); break; }
 }

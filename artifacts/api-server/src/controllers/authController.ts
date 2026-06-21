@@ -30,6 +30,7 @@ export async function login(req: Request, res: Response): Promise<void> {
     res.cookie("token", token, { httpOnly: true, maxAge: 8 * 60 * 60 * 1000 });
     res.redirect("/dashboard");
   } catch (err) {
+    console.error("Login error:", err);
     res.render("auth/login", { title: "Login", error: "Server error. Please try again." });
   }
 }
