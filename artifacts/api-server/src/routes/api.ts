@@ -338,12 +338,94 @@ router.patch("/tickets/:id", requireApiAuth, async (req, res) => {
 router.delete("/tickets/:id", requireApiAuth, requireApiRole("admin", "manager"), async (req, res) => {
   const id = parseInt(req.params["id"]!);
   try {
+    await prisma.ticketTransfer.deleteMany({ where: { ticketId: id } });
     await prisma.ticketLog.deleteMany({ where: { ticketId: id } });
     await prisma.ticket.delete({ where: { id } });
     res.status(204).send();
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Failed to delete ticket" });
+  }
+});
+
+// ─── Ticket Transfers ─────────────────────────────────────────────────────────
+
+router.post("/tickets/:id/transfer", requireApiAuth, async (req, res) => {
+  const ticketId = parseInt(req.params["id"]!);
+  const { type, targetId, remark } = req.body as { type: "user" | "department"; targetId: number; remark: string };
+
+  if (!remark || !remark.trim()) {
+    res.status(400).json({ error: "Remark is required for transfer" });
+    return;
+  }
+  if (!type || !targetId) {
+    res.status(400).json({ error: "Transfer type and target are required" });
+    return;
+  }
+
+  try {
+    const ticket = await prisma.ticket.findUnique({ where: { id: ticketId } });
+    if (!ticket) { res.status(404).json({ error: "Ticket not found" }); return; }
+
+    const transferData: Record<string, unknown> = {
+      ticketId,
+      transferById: req.user!.id,
+      remark: remark.trim(),
+    };
+
+    let targetName = "";
+    let updateData: Record<string, unknown> = {};
+
+    if (type === "user") {
+      const targetUser = await prisma.user.findUnique({ where: { id: Number(targetId) } });
+      if (!targetUser) { res.status(404).json({ error: "Target user not found" }); return; }
+      transferData["toUserId"] = targetUser.id;
+      targetName = targetUser.name;
+      updateData = { assignedTo: targetUser.id, status: "In_Progress" };
+    } else {
+      const targetDept = await prisma.department.findUnique({ where: { id: Number(targetId) } });
+      if (!targetDept) { res.status(404).json({ error: "Target department not found" }); return; }
+      transferData["toDeptId"] = targetDept.id;
+      targetName = targetDept.name;
+      updateData = { departmentId: targetDept.id, assignedTo: null, status: "In_Progress" };
+    }
+
+    const [transfer] = await prisma.$transaction([
+      prisma.ticketTransfer.create({ data: transferData as Parameters<typeof prisma.ticketTransfer.create>[0]["data"], include: { transferBy: true, toUser: true, toDept: true } }),
+      prisma.ticket.update({ where: { id: ticketId }, data: updateData as Parameters<typeof prisma.ticket.update>[0]["data"] }),
+      prisma.ticketLog.create({
+        data: {
+          ticketId,
+          action: type === "user" ? "Transferred to User" : "Transferred to Department",
+          description: `Ticket transferred to ${targetName} by ${req.user!.name}. Remark: ${remark.trim()}`,
+          userId: req.user!.id,
+        },
+      }),
+    ]);
+
+    res.status(201).json(transfer);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to transfer ticket" });
+  }
+});
+
+router.get("/tickets/:id/transfers", requireApiAuth, async (req, res) => {
+  const ticketId = parseInt(req.params["id"]!);
+  try {
+    const transfers = await prisma.ticketTransfer.findMany({
+      where: { ticketId },
+      orderBy: { createdAt: "desc" },
+      include: {
+        transferBy: { select: { id: true, name: true, email: true, role: true } },
+        toUser: { select: { id: true, name: true, email: true, role: true } },
+        toDept: { select: { id: true, name: true } },
+      },
+    });
+    res.json(transfers);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to load transfers" });
   }
 });
 

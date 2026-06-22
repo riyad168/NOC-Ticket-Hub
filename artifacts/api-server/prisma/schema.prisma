@@ -13,8 +13,9 @@ model Department {
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
 
-  users   User[]
-  tickets Ticket[]
+  users             User[]
+  tickets           Ticket[]
+  transfersReceived TicketTransfer[] @relation("TransferToDept")
 
   @@map("departments")
 }
@@ -29,10 +30,12 @@ model User {
   createdAt    DateTime    @default(now()) @map("created_at")
   updatedAt    DateTime    @updatedAt @map("updated_at")
 
-  department      Department? @relation(fields: [departmentId], references: [id])
-  assignedTickets Ticket[]    @relation("AssignedEngineer")
-  createdTickets  Ticket[]    @relation("CreatedBy")
-  ticketLogs      TicketLog[]
+  department         Department?      @relation(fields: [departmentId], references: [id])
+  assignedTickets    Ticket[]         @relation("AssignedEngineer")
+  createdTickets     Ticket[]         @relation("CreatedBy")
+  ticketLogs         TicketLog[]
+  transfersInitiated TicketTransfer[] @relation("TransferBy")
+  transfersReceived  TicketTransfer[] @relation("TransferToUser")
 
   @@map("users")
 }
@@ -89,12 +92,13 @@ model Ticket {
   updatedAt    DateTime     @updatedAt @map("updated_at")
   createdById  Int          @map("created_by_id")
 
-  customer         Customer        @relation(fields: [customerId], references: [id])
-  category         TicketCategory  @relation(fields: [categoryId], references: [id])
-  department       Department?     @relation(fields: [departmentId], references: [id])
-  assignedEngineer User?           @relation("AssignedEngineer", fields: [assignedTo], references: [id])
-  createdBy        User            @relation("CreatedBy", fields: [createdById], references: [id])
+  customer         Customer         @relation(fields: [customerId], references: [id])
+  category         TicketCategory   @relation(fields: [categoryId], references: [id])
+  department       Department?      @relation(fields: [departmentId], references: [id])
+  assignedEngineer User?            @relation("AssignedEngineer", fields: [assignedTo], references: [id])
+  createdBy        User             @relation("CreatedBy", fields: [createdById], references: [id])
   logs             TicketLog[]
+  transfers        TicketTransfer[]
 
   @@map("tickets")
 }
@@ -111,4 +115,21 @@ model TicketLog {
   user   User   @relation(fields: [userId], references: [id])
 
   @@map("ticket_logs")
+}
+
+model TicketTransfer {
+  id           Int      @id @default(autoincrement())
+  ticketId     Int      @map("ticket_id")
+  transferById Int      @map("transfer_by_id")
+  toUserId     Int?     @map("to_user_id")
+  toDeptId     Int?     @map("to_dept_id")
+  remark       String
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  ticket     Ticket      @relation(fields: [ticketId], references: [id])
+  transferBy User        @relation("TransferBy", fields: [transferById], references: [id])
+  toUser     User?       @relation("TransferToUser", fields: [toUserId], references: [id])
+  toDept     Department? @relation("TransferToDept", fields: [toDeptId], references: [id])
+
+  @@map("ticket_transfers")
 }
